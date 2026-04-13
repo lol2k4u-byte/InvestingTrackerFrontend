@@ -30,7 +30,7 @@
     <script type="text/javascript">
       const response = await fetch("/ticker/AAPL");
       const data = await response.text();
-      document.getElementById("ko");
+      document.getElementById("ko").innerHTML = data;
     </script>
 
 </body>
