@@ -28,9 +28,13 @@
 <script type="module" src="javascripts/tickerList.js"></script>
     
     <script type="module">
+      alert('test1');
       const response = await fetch("https://investingtracker.onrender.com/ticker/AAPL");
+      alert('test2');
       const data = await response.text();
+      alert('test3');
       document.getElementById("ko").textContent = data;
+      alert('test4');
     </script>
 
 </body>
