@@ -26,6 +26,12 @@
     <div id="liste" class="liste"/>
   </div>
 <script type="module" src="javascripts/tickerList.js"></script>
+    
+    <script type="text/javascript">
+      const response = await fetch("/ticker/AAPL");
+      const data = await response.text();
+      document.getElementById("ko");
+    </script>
 
 </body>
 </html>
