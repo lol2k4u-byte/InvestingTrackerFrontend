@@ -14,7 +14,7 @@
 
   <div class="container">
 <h1>InvestingTracker</h1>
-<p id="ko">This is a paragraph.</p>
+<p id="ko">Indlæser...</p>
 
     <input
       type="text"
@@ -29,15 +29,9 @@
     
     <script type="module">
   try {
-    alert("test1");
     const response = await fetch("https://investingtracker.onrender.com/ticker/AAPL");
-    alert("test2");
-
     const data = await response.text();
-    alert("test3");
-
     document.getElementById("ko").textContent = data;
-    alert("test4");
   } catch (error) {
     console.error(error);
     alert("Fejl: " + error.message);
