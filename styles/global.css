@@ -10,7 +10,7 @@ body {
   margin: 0 auto;
 }
 
-.soegefelt {
+.textfield {
   width: 100%;
   box-sizing: border-box;
   padding: 16px 18px;
@@ -21,6 +21,6 @@ body {
   outline: none;
 }
 
-.soegefelt:focus {
+.textfield:focus {
   border-color: #999;
 }
