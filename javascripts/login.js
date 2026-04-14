@@ -20,32 +20,18 @@ async function loginUser(event) {
 
         const data = await response.text();
 
-<<<<<<< HEAD
-  if (data.token) {
-    localStorage.setItem("token", data.textContent);
-    window.location.href = "/index.html";
-  }else {
-    message.style.color = "red";
-    message.textContent = "Forkert brugernavn eller adgangskode.";
-  }
-=======
-        if (response.ok) {
-            localStorage.setItem("token", data);
-
-            message.style.color = "green";
-            message.textContent = "Login lykkedes!";
-
-        } else {
+         if (data.token) {
+            localStorage.setItem("token", data.textContent);
+            window.location.href = "/index.html";
+        }else {
             message.style.color = "red";
-            message.textContent = "Forkert login.";
+            message.textContent = "Forkert brugernavn eller adgangskode.";
         }
-
     } catch (error) {
         console.error(error);
         message.style.color = "red";
         message.textContent = "Kan ikke kontakte serveren.";
     }
->>>>>>> 9cb9ff3e7f3e7a20e7bfa92840d3eb6d86cbddce
 }
 
 document
