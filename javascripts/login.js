@@ -22,7 +22,7 @@ async function loginUser(event) {
 
          if (response.status === 200) {
             localStorage.setItem("token", data);
-            window.location.href = "/index.html";
+            window.location.href = "index.html";
         }else {
             message.style.color = "red";
             message.textContent = "Forkert brugernavn eller adgangskode.";
