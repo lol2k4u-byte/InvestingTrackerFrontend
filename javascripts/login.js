@@ -20,14 +20,11 @@ async function loginUser(event) {
 
   if (data.token) {
     localStorage.setItem("token", data.textContent);
-      message.style.color = "green";
-      message.textContent = "Login lykkedes!";
+    window.location.href = "/index.html";
   }else {
     message.style.color = "red";
     message.textContent = "Forkert brugernavn eller adgangskode.";
   }
-
-  return false;
 }
 
 document.getElementById("loginForm").addEventListener("submit", loginUser);
