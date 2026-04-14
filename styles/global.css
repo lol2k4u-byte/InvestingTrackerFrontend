@@ -10,6 +10,21 @@ body {
   margin: 0 auto;
 }
 
+.button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px 18px;
+  margin-bottom: 24px;
+  font-size: 18px;
+  border: 1px solid #d8d8d8;
+  border-radius: 14px;
+  outline: none;
+}
+
+.button:focus {
+  border-color: #999;
+}
+
 .textfield {
   width: 100%;
   box-sizing: border-box;
