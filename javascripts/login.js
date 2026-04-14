@@ -20,8 +20,8 @@ async function loginUser(event) {
 
         const data = await response.text();
 
-         if (data.token) {
-            localStorage.setItem("token", data.textContent);
+         if (response.status === 200) {
+            localStorage.setItem("token", data);
             window.location.href = "/index.html";
         }else {
             message.style.color = "red";
