@@ -8,6 +8,7 @@ function loginUser(event) {
     if (username === "admin" && password === "1234") {
       message.style.color = "green";
       message.textContent = "Login lykkedes!";
+        localStorage.setItem("token", "min-token");
     } else {
     message.style.color = "red";
     message.textContent = "Forkert brugernavn eller adgangskode.";
