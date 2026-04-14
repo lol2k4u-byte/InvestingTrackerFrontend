@@ -18,3 +18,5 @@ alert('3');
 alert('6');
   return false;
 }
+
+document.getElementById("loginForm").addEventListener("submit", loginUser);
