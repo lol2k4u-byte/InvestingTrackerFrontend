@@ -1,10 +1,9 @@
 export function createTickerCard(element) {
   const card = document.createElement("div");
-  card.className = "item";
-  card.style.cursor = "pointer";
+  card.className = "cardItem pointer";
 
-  const afkastClass = element.afkast.startsWith("-") ? "negativ" : "positiv";
-  const idagClass = element.idag.startsWith("-") ? "negativ" : "positiv";
+  const afkastClass = element.afkast.startsWith("-") ? "negativeAmount" : "positiveAmount";
+  const idagClass = element.idag.startsWith("-") ? "negativeAmount" : "positiveAmount";
 
   card.innerHTML = `
     <div class="menu-wrapper">
