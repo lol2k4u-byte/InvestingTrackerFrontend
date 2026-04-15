@@ -23,6 +23,10 @@ body {
   min-width: 0;
 }
 
+.statLabel {
+  color: #777;
+}
+
 .pointer {
   cursor: pointer;
 }
