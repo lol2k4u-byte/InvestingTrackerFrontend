@@ -1,9 +1,5 @@
-.stats {
+.dividendStats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-}
-
-.stat {
-  min-width: 0;
 }
