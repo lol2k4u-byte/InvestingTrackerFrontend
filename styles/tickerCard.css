@@ -79,7 +79,7 @@
   font-weight: 700;
 }
 
-.cardItemstats {
+.cardItemStats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
@@ -89,7 +89,7 @@
 
 
 @media (max-width: 900px) {
-  .cardItemstats {
+  .cardItemStats {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -97,11 +97,11 @@
     font-size: 26px;
   }
 
-  .cardItemLabel {
+  .cardItemStatLabel {
     font-size: 22px;
   }
 
-  .cardItemValue {
+  .cardItemStatValue {
     font-size: 26px;
   }
 }
@@ -112,7 +112,7 @@
     border-radius: 18px;
   }
 
-  .cardItem-header {
+  .cardItemHeader {
     margin-bottom: 20px;
   }
 
@@ -126,17 +126,17 @@
     font-size: 22px;
   }
 
-  .cardItemstats {
+  .cardItemStats {
     grid-template-columns: 1fr;
     gap: 18px;
   }
 
-  .cardItemLabel {
+  .cardItemStatLabel {
     font-size: 18px;
     margin-bottom: 6px;
   }
 
-  .cardItemValue {
+  .cardItemStatValue {
     font-size: 24px;
   }
 }
