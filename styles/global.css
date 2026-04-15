@@ -11,20 +11,16 @@ body {
   margin: 0 auto;
 }
 
+.positiveAmount {
+  color: #46a235;
+}
+
+.negativeAmount {
+  color: #c23473;
+}
+
 .stat {
   min-width: 0;
-}
-
-.label {
-  font-size: 26px;
-  color: #777;
-  margin-bottom: 10px;
-}
-
-.value {
-  font-size: 30px;
-  font-weight: 700;
-  color: #111;
 }
 
 .pointer {
@@ -44,4 +40,11 @@ body {
 
 .customControl:focus {
   border-color: #999;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 16px;
+  }
+
 }
