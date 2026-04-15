@@ -1,3 +1,5 @@
+import { getApiBase } from "./apiBase.js";
+
 async function loginUser(event) {
     event.preventDefault();
 
@@ -5,8 +7,9 @@ async function loginUser(event) {
     const password = document.getElementById("password").value;
     const message = document.getElementById("message");
 
+    const url = getApiBase() + "/Login/login";
     try {
-        const response = await fetch("https://investingtracker.onrender.com/Login/login", {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "accept": "text/plain",
@@ -22,7 +25,7 @@ async function loginUser(event) {
 
          if (response.status === 200) {
             localStorage.setItem("token", data);
-            window.location.href = "https://lol2k4u-byte.github.io/InvestingTrackerFrontend/";
+            window.location.href = "./index.html";
         }else {
             message.style.color = "red";
             message.textContent = "Forkert brugernavn eller adgangskode.";
