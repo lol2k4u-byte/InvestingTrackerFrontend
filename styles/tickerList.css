@@ -59,22 +59,6 @@ body {
   gap: 24px;
 }
 
-.stat {
-  min-width: 0;
-}
-
-.label {
-  font-size: 26px;
-  color: #777;
-  margin-bottom: 10px;
-}
-
-.value {
-  font-size: 30px;
-  font-weight: 700;
-  color: #111;
-}
-
 .positiv {
   color: #46a235;
 }
