@@ -6,10 +6,12 @@
 
 .itemStatLabel {
   font-size: 18px;
+  text-decoration: underline;
   margin-bottom: 10px;
 }
 
 .itemStatVabel {
   font-size: 20px;
+  text-decoration: underline;
   font-weight: 700;
 }
