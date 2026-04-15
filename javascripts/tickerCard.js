@@ -74,3 +74,9 @@ export function createTickerCard(element) {
 
   return card;
 }
+
+document.addEventListener("click", () => {
+  document.querySelectorAll(".cardItemPopup-menu").forEach(menu => {
+    menu.classList.remove("show");
+  });
+});
