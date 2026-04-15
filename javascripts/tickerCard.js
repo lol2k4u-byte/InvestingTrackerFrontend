@@ -17,28 +17,28 @@ export function createTickerCard(element) {
 
     <div class="cardItemHeader">
       <div class="cardItemLogo">${element.logo}</div>
-      <div class="cardItemStatName">${element.navn}</div>
+      <div class="cardItemName">${element.navn}</div>
     </div>
 
-    <div class="stat">
-      <div class="cardItemStat">
-        <div class="cardItemLabel">Værdi</div>
-        <div class="cardItemValue">${element.vaerdi}</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="cardItemStatLabel">Værdi</div>
+        <div class="cardItemStatValue">${element.vaerdi}</div>
       </div>
 
       <div class="stat">
-        <div class="cardItemLabel">Afkast</div>
-        <div class="cardItemValue ${afkastClass}">${element.afkast}</div>
+        <div class="cardItemStatLabel">Afkast</div>
+        <div class="cardItemStatValue ${afkastClass}">${element.afkast}</div>
       </div>
 
       <div class="stat">
-        <div class="cardItemLabel">I dag</div>
-        <div class="cardItemValue ${idagClass}">${element.idag}</div>
+        <div class="cardItemStatLabel">I dag</div>
+        <div class="cardItemStatValue ${idagClass}">${element.idag}</div>
       </div>
 
       <div class="stat">
-        <div class="cardItemLabel">Seneste</div>
-        <div class="cardItemValue">${element.seneste}</div>
+        <div class="cardItemStatLabel">Seneste</div>
+        <div class="cardItemStatValue">${element.seneste}</div>
       </div>
     </div>
   `;
