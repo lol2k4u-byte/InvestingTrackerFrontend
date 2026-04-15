@@ -27,6 +27,10 @@ body {
   color: #111;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .customControl {
   width: 100%;
   box-sizing: border-box;
