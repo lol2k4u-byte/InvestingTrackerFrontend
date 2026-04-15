@@ -23,22 +23,22 @@ export function createTickerCard(element) {
     <div class="cardItemStats">
       <div class="stat">
         <div class="cardItemStatLabel StatLabel">Værdi</div>
-        <div class="cardItemStatValue">${element.vaerdi}</div>
+        <div class="cardItemStatValue StatValue">${element.vaerdi}</div>
       </div>
 
       <div class="stat">
         <div class="cardItemStatLabel StatLabel">Afkast</div>
-        <div class="cardItemStatValue ${afkastClass}">${element.afkast}</div>
+        <div class="cardItemStatValue StatValue ${afkastClass}">${element.afkast}</div>
       </div>
 
       <div class="stat">
         <div class="cardItemStatLabel StatLabel">I dag</div>
-        <div class="cardItemStatValue ${idagClass}">${element.idag}</div>
+        <div class="cardItemStatValue StatValue ${idagClass}">${element.idag}</div>
       </div>
 
       <div class="stat">
         <div class="cardItemStatLabel StatLabel">Seneste</div>
-        <div class="cardItemStatValue">${element.seneste}</div>
+        <div class="cardItemStatValue StatValue">${element.seneste}</div>
       </div>
     </div>
   `;
