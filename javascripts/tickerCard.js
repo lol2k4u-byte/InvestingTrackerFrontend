@@ -21,7 +21,7 @@ export function createTickerCard(element) {
     </div>
 
     <div class="cardItemStats">
-      <div class="stat">
+      <div class="cardItemStat">
         <div class="cardItemLabel">Værdi</div>
         <div class="cardItemValue">${element.vaerdi}</div>
       </div>
