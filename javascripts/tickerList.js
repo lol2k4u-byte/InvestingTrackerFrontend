@@ -27,9 +27,3 @@ elementer.forEach((element) => {
   const card = createTickerCard(element);
   liste.appendChild(card);
 });
-
-document.addEventListener("click", () => {
-  document.querySelectorAll(".popup-menu").forEach(menu => {
-    menu.classList.remove("vis");
-  });
-});
