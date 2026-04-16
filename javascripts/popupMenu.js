@@ -1,10 +1,10 @@
-export function createPopupMenu(text, elements) {
+export function createPopupMenu(sign, elements) {
   const menu = document.createElement("div");
   menu.className = "menu-wrapper";
 
   const button = document.createElement("button");
   button.className = "menu-button";
-  button.value = text;
+  button.value = sign;
   button.addEventListener("click", (e) => {
     e.stopPropagation();
     popupMenu.classList.toggle("show");
