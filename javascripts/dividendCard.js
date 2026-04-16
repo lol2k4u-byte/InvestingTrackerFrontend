@@ -41,7 +41,7 @@ export function createDividendCard(element) {
     }
     ];
 
-    const popupMenu = createPopupMenu("a", elementer);
+    const popupMenu = createPopupMenu("⋯", elementer);
     dividendCard.appendChild(popupMenu);
 
     return dividendCard;
