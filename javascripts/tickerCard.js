@@ -7,7 +7,7 @@ export function createTickerCard(element) {
 
   card.innerHTML = `
     <div class="cardItemMenu-wrapper">
-      <button class="cardItemMenu-button">⋯</button>
+      <button class="cardItemMenu-button">&plus;</button>
       <div class="cardItemPopup-menu">
         <div class="cardItemMenu-item">Handel</div>
         <div class="cardItemMenu-item">Option</div>
