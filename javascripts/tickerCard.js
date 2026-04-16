@@ -6,12 +6,12 @@ export function createTickerCard(element) {
   const idagClass = element.idag.startsWith("-") ? "negativeAmount" : "positiveAmount";
 
   card.innerHTML = `
-    <div class="cardItemMenu-wrapper">
-      <button class="cardItemMenu-button">&plus;</button>
-      <div class="cardItemPopup-menu">
-        <div class="cardItemMenu-item">Handel</div>
-        <div class="cardItemMenu-item">Option</div>
-        <div class="cardItemMenu-item">Udbytte</div>
+    <div class="menu-wrapper">
+      <button class="cmenu-button">&plus;</button>
+      <div class="popup-menu">
+        <div class="menu-item">Handel</div>
+        <div class="menu-item">Option</div>
+        <div class="menu-item">Udbytte</div>
       </div>
     </div>
 
@@ -43,9 +43,9 @@ export function createTickerCard(element) {
     </div>
   `;
 
-  const menuKnap = card.querySelector(".cardItemMenu-button");
-  const popupMenu = card.querySelector(".cardItemPopup-menu");
-  const menuItems = card.querySelectorAll(".cardItemMenu-item");
+  const menuKnap = card.querySelector(".menu-button");
+  const popupMenu = card.querySelector(".popup-menu");
+  const menuItems = card.querySelectorAll(".menu-item");
 
   card.addEventListener("click", () => {
     window.location.href = `ticker.html?id=${element.id}`;
@@ -74,9 +74,3 @@ export function createTickerCard(element) {
 
   return card;
 }
-
-document.addEventListener("click", () => {
-  document.querySelectorAll(".cardItemPopup-menu").forEach(menu => {
-    menu.classList.remove("show");
-  });
-});
