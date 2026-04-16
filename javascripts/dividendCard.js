@@ -1,3 +1,5 @@
+import { createPopupMenu } from "./popupMenu.js";
+
 export function createDividendCard(element) {
     const dividendCard = document.createElement("div");
     dividendCard.className = "item eventItem pointer";
@@ -27,6 +29,20 @@ export function createDividendCard(element) {
             </div>
         </div>
     `;
+
+    const elementer = [
+    {
+	    text: "Rediger",
+        onClick: () => { window.location.href = `dividend.html?id=${element.id}`; }
+    },
+    {
+	    text: "Slet",
+        onClick: () => { window.location.href = `deleteDividend.html?id=${element.id}`; }
+    }
+    ];
+
+    const popupMenu = createPopupMenu("&plus;", elementer);
+    dividendCard.appendChild(popupMenu);
 
     return dividendCard;
 };
