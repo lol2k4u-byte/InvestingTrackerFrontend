@@ -1,6 +1,10 @@
+import { getTickerList } from "./services/getTickerList.js";
 import { createTickerCard } from "./tickerCard.js";
 
-const elementer = [
+const elementer = await getTickerList();
+console.info(elementer);
+
+const elementer2 = [
   {
 	id: 1,
     navn: "Ericsson B",

@@ -31,16 +31,6 @@
 <script type="module" src="javascripts/tickerList.js"></script>
 <script type="module" src="javascripts/hidePopupMenu.js"></script>
     
-    <script type="module">
-  try {
-    const response = await fetch("https://investingtracker.onrender.com/ticker/AAPL");
-    const data = await response.text();
-    document.getElementById("ko").textContent = data;
-  } catch (error) {
-    console.error(error);
-    alert("Fejl: " + error.message);
-  }
-    </script>
 
 </body>
 </html>

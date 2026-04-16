@@ -63,6 +63,9 @@
 .cardItemLogo {
   width: 56px;
   height: 56px;
+}
+
+.cardItemLogoText {
   border-radius: 50%;
   background: #000;
   color: #fff;
@@ -129,9 +132,11 @@
   .cardItemLogo {
     width: 48px;
     height: 48px;
-    font-size: 22px;
   }
 
+  .cardItemLogoText {
+    font-size: 22px;
+  }
   .cardItemName {
     font-size: 22px;
   }
