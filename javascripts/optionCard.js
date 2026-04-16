@@ -48,5 +48,19 @@ export function createOptionCard(element) {
         </div>
     `;
 
+    const elementer = [
+    {
+	    text: "Rediger",
+        onClick: () => { window.location.href = `option.html?id=${element.id}`; }
+    },
+    {
+	    text: "Slet",
+        onClick: () => { window.location.href = `deleteOption.html?id=${element.id}`; }
+    }
+    ];
+
+    const popupMenu = createPopupMenu("⋯", elementer);
+    optionCard.appendChild(popupMenu);
+
     return optionCard;
 };
