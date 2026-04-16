@@ -21,7 +21,7 @@ export function createPopupMenu(sign, elements) {
   elements.forEach((element) => {
     const item = document.createElement("div");
     item.className = "menu-item";
-    item.value = element.text:
+    item.value = element.text;
 
     item.addEventListener("click", () => {
       e.stopPropagation();
