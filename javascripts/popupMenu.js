@@ -23,7 +23,7 @@ export function createPopupMenu(sign, elements) {
     item.className = "menu-item";
     item.textContent = element.text;
 
-    item.addEventListener("click", () => {
+    item.addEventListener("click", (e) => {
       e.stopPropagation();
       popupMenu.classList.remove("show");
 
