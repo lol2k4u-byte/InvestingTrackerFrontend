@@ -33,5 +33,19 @@ export function createTradeCard(element) {
         </div>
     `;
 
+    const elementer = [
+    {
+	    text: "Rediger",
+        onClick: () => { window.location.href = `trade.html?id=${element.id}`; }
+    },
+    {
+	    text: "Slet",
+        onClick: () => { window.location.href = `deleteTrade.html?id=${element.id}`; }
+    }
+    ];
+
+    const popupMenu = createPopupMenu("⋯", elementer);
+    tradeCard.appendChild(popupMenu);
+
     return tradeCard;
 };
