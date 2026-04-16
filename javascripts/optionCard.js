@@ -1,3 +1,5 @@
+import { createPopupMenu } from "./popupMenu.js";
+
 export function createOptionCard(element) {
     const optionCard = document.createElement("div");
     optionCard.className = "item eventItem pointer";
