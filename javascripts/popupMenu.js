@@ -24,7 +24,12 @@ export function createPopupMenu(sign, elements) {
     item.value = element.text:
 
     item.addEventListener("click", () => {
-      window.location.href = `${element.link}`;
+      e.stopPropagation();
+      popupMenu.classList.remove("show");
+
+      if (element.onClick) {
+        element.onClick();
+      }
     });
     
     popupMenu.appendChild(item);
