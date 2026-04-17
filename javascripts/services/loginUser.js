@@ -8,7 +8,7 @@ export async function loginUser(event) {
     const password = document.getElementById("password").value;
     const message = document.getElementById("message");
 
-    const url = getApiBase() + "/Login/login";
+    const url = getApiBase() + "Login/login";
     try {
         const response = await fetch(url, {
             method: "POST",
