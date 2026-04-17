@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>InvestingTracker</title>
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/global.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="login-box">
+            <h1 id="pageTitle">Trade</h1>
+
+            <form id="tradeForm">
+
+                <input
+                    type="date"
+                    id="date"
+                    class="customControl"
+                    required
+                >
+
+                <input
+                    type="number"
+                    id="buySellType"
+                    class="customControl"
+                    placeholder="Buy/Sell Type..."
+                    required
+                >
+
+                <input
+                    type="number"
+                    id="numberOfShares"
+                    class="customControl"
+                    placeholder="Antal aktier..."
+                    required
+                >
+
+                <input
+                    type="number"
+                    step="0.01"
+                    id="sharePrice"
+                    class="customControl"
+                    placeholder="Pris..."
+                    required
+                >
+
+                <input
+                    type="number"
+                    step="0.01"
+                    id="costs"
+                    class="customControl"
+                    placeholder="Omkostninger..."
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="customControl"
+                    id="submitButton"
+                >
+                    Gem
+                </button>
+
+                <div
+                    class="message"
+                    id="message"
+                ></div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script
+        type="module"
+        src="javascripts/tradeForm.js"
+    ></script>
+
+</body>
+</html>
