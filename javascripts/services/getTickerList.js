@@ -4,7 +4,7 @@ import { handleAuthStatus } from "./apiBase.js";
 
 export async function getTickerList(message) {
 
-    const url = getApiBase() + "/Ticker";
+    const url = getApiBase() + "Ticker";
     
     try {
         const response = await fetch(url, {
