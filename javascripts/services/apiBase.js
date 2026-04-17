@@ -24,7 +24,7 @@ export function setAuthToken(token) {
     localStorage.setItem("auth-token", token);
 }
 
-export function handleAuthStatus(reponse) {
+export function handleAuthStatus(response) {
     if (response.status == 401) {
         localStorage.removeItem("auth-token");
         window.location.href = "/login.html";
