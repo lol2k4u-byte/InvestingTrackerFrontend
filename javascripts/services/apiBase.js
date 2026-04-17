@@ -27,6 +27,6 @@ export function setAuthToken(token) {
 export function handleAuthStatus(response) {
     if (response.status == 401) {
         localStorage.removeItem("auth-token");
-        window.location.href = "login.html";
+        window.location.href = "/InvestingTrackerFrontend/login.html";
     }
 };
