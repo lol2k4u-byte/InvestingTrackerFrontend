@@ -1,5 +1,6 @@
 import { getApiBase } from "./apiBase.js";
 import { getHeaders } from "./apiBase.js";
+import { handleAuthStatus } from "./apiBase.js";
 
 export async function getTickerList(message) {
 
@@ -10,11 +11,11 @@ export async function getTickerList(message) {
             method: "GET",
             headers: getHeaders()
         });
-
-        const data = await response.json();
-
-         if (response.status === 200) {
-            return data;
+        
+        handleAuthStatus(response);
+        
+        if (response.status === 200) {
+            return await response.json();
         }else {
             message.style.color = "red";
             message.textContent = "Forkert brugernavn eller adgangskode.";
