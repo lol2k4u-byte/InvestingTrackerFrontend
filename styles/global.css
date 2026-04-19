@@ -6,6 +6,11 @@ body {
   color: #111;
 }
 
+.message {
+  color: red;
+  margin-top: 5px;
+}
+
 .container {
   max-width: 1100px;
   margin: 0 auto;
@@ -45,6 +50,7 @@ body {
   border-radius: 14px;
   outline: none;
 }
+
 
 .customControl:focus {
   border-color: #999;

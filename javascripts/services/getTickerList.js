@@ -1,28 +1,13 @@
-import { getApiBase } from "./apiBase.js";
-import { getHeaders } from "./apiBase.js";
-import { handleAuthStatus } from "./apiBase.js";
+import { getResponseReqAuth } from "./apiBase.js";
+
 
 export async function getTickerList(message) {
 
-    const url = getApiBase() + "Ticker";
+    const endpoint = "Ticker";
+    const method = "GET";
+    const obj = null;
+
+    return await getResponseReqAuth(endpoint, method, obj, message);
     
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: getHeaders()
-        });
-        
-        handleAuthStatus(response);
-        
-        if (response.status === 200) {
-            return await response.json();
-        }else {
-            message.style.color = "red";
-            message.textContent = "Forkert brugernavn eller adgangskode.";
-        }
-    } catch (error) {
-        console.error(error);
-        message.style.color = "red";
-        message.textContent = "Kan ikke kontakte serveren.";
-    }
+
 };
