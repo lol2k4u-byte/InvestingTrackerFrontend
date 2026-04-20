@@ -1,4 +1,5 @@
 import { createPopupMenu } from "./popupMenu.js";
+import { getAmountFormat } from "./global.js";
 
 export function createTickerCard(element) {
   const card = document.createElement("div");
@@ -9,10 +10,6 @@ export function createTickerCard(element) {
 
   const afkastClass = "negativeAmount";
   const idagClass = "positiveAmount";
-
-  const symbolChar = element.symbol?.[0] ?? "";
-  const logoClass = element.logo == null ? "cardItemLogoText" : "cardItemLogo";
-  const logoHtml = element.logo == null ? symbolChar : `<img class="cardItemLogo" src="${element.logo}"/>`;
 
   const cardItemHeader = document.createElement("div");
   cardItemHeader.className = "cardItemHeader";
@@ -31,12 +28,15 @@ export function createTickerCard(element) {
 }
   card.appendChild(cardItemHeader);
 
+  let totalValue = getAmountFormat(element.totalValue, element.currency);
+  let latestPrice = getAmountFormat(element.latestPrice, element.currency);
+  
   const cardItemStats = document.createElement("div");
   cardItemStats.className = "cardItemStats";
   cardItemStats.innerHTML = `
       <div class="stat">
         <div class="cardItemStatLabel StatLabel">Værdi</div>
-        <div class="cardItemStatValue StatValue">${element.totalValue}</div>
+        <div class="cardItemStatValue StatValue">${totalValue}</div>
       </div>
 
       <div class="stat">
@@ -51,13 +51,13 @@ export function createTickerCard(element) {
 
       <div class="stat">
         <div class="cardItemStatLabel StatLabel">Seneste</div>
-        <div class="cardItemStatValue StatValue">${element.latestPrice}</div>
+        <div class="cardItemStatValue StatValue">${latestPrice}</div>
       </div>
   `;
   card.appendChild(cardItemStats);
   
   
-  const parm = `accountId=${element.accountId}&symbol=${element.symbol}`;
+  const parm = `accountid=${element.accountId}&symbol=${element.symbol}`;
 
   const elementer = [
   {

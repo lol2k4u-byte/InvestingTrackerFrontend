@@ -2,11 +2,11 @@ import { getDateFormat } from "./global.js";
 import { createTradeCard } from "./tradeCard.js";
 import { createOptionCard } from "./optionCard.js";
 import { createDividendCard } from "./dividendCard.js";
-import { getTicker, getTickerEvents } from "./services/tickerApi.js";
+import { getTickerInfo, getTickerEvents } from "./services/tickerApi.js";
 
 const eventList = document.getElementById("eventList");
 const parm = loadParm();
-const ticker = await getTicker(parm.symbol);
+const ticker = await getTickerInfo(parm.accountId, parm.symbol);
 const events = await getTickerEvents(parm.accountId, parm.symbol);
 
 function loadParm() {

@@ -1,5 +1,5 @@
 import { createPopupMenu } from "./popupMenu.js";
-import { getBuySellTypeString, getDateFormat, getAmountFormat } from "./global.js";
+import { getBuySellTypeString, getDateFormat, getAmountFormat, getNumberFormat } from "./global.js";
 
 export function createTradeCard(element, currency) {
     const tradeCard = document.createElement("div");
@@ -7,6 +7,7 @@ export function createTradeCard(element, currency) {
     tradeCard.onclick = () => { window.location.href = `trade.html?id=${element.id}`; }
 
     let date = getDateFormat(element.date);
+    let numberOfShares = getNumberFormat(element.numberOfShares);
     let sharePrice = getAmountFormat(element.sharePrice, currency);
     let totalPrice = getAmountFormat(element.sharePrice * element.numberOfShares, currency);
     let type = getBuySellTypeString(element.buySellType);
@@ -22,7 +23,7 @@ export function createTradeCard(element, currency) {
 
             <div class="stat">
                 <div class="itemStatLabel">Antal</div>
-                <div class="itemStatValue">${element.numberOfShares}</div>
+                <div class="itemStatValue">${numberOfShares}</div>
             </div>
 
             <div class="stat">

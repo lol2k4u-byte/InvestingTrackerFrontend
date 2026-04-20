@@ -23,6 +23,7 @@ export function getTitleContainer(title, onDelete) {
         deleteButton.onclick = () => {
             if (confirm("Er du sikker på, at du vil slette?")) {
                 onDelete();
+                window.history.back();
             }
         };
     }

@@ -19,6 +19,14 @@ export function getAmountFormat(amount, currency) {
     })}`;
 }
 
+export function getNumberFormat(amount) {
+    if (amount == null) {
+        return "";
+    }
+
+    return Number(amount).toLocaleString("da-DK");
+}
+
 export function getBuySellTypeString(buySellType) {
     if (buySellType === 0) { return "Køb"; }
     if (buySellType === 1) { return "Salg"; }

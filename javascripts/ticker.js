@@ -1,18 +1,12 @@
 import { createTickerCard } from "./tickerCard.js";
+import { getTickerInfo } from "./services/tickerApi.js"
 
 const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+const accountId = params.get("accountid");
+const symbol = params.get("symbol");
+const ticker = await getTickerInfo(accountId, symbol);
 
-const element = {
-  id: 1,
-  navn: "Ericsson B",
-  vaerdi: "22.462 kr",
-  afkast: "+7,71%",
-  idag: "-1,62%",
-  seneste: "109,15 SEK"
-};
-
-const card = createTickerCard(element);
+const card = createTickerCard(ticker);
 document.getElementById("tickerCard").appendChild(card);
 
 document.addEventListener("click", () => {

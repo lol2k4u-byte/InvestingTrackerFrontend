@@ -72,10 +72,8 @@ async function submitTrade(event) {
     const costs = getDecimal(elements.costsElem);
 
     if (isValid(date, buySellType, numberOfShares, sharePrice, costs)) {
-        const response = saveTrade(date, buySellType, numberOfShares, sharePrice, costs)
-        if (response != null) {
-            window.history.back();
-        }
+        const response = await saveTrade(date, buySellType, numberOfShares, sharePrice, costs);
+        window.history.back();
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
