@@ -40,6 +40,29 @@ body {
   cursor: pointer;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
+.titleContainer {
+  display: flex; 
+  justify-content: space-between;
+  align-items: center; 
+  margin-bottom: 20px;
+}
+
+.titleContainer h1 {
+  margin: 0;
+}
+
+.titleContainer button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 0;
+}
+
 .customControl {
   width: 100%;
   box-sizing: border-box;
@@ -84,7 +107,7 @@ body {
   border: 1px solid #ddd;
   border-radius: 12px;
   min-width: 140px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   z-index: 100;
 }
 

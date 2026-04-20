@@ -1,8 +1,15 @@
 import { createPopupMenu } from "./popupMenu.js";
+import { getBuySellTypeString, getDateFormat, getAmountFormat } from "./global.js";
 
-export function createTradeCard(element) {
+export function createTradeCard(element, currency) {
     const tradeCard = document.createElement("div");
     tradeCard.className = "item eventItem pointer";
+    tradeCard.onclick = () => { window.location.href = `trade.html?id=${element.id}`; }
+
+    let date = getDateFormat(element.date);
+    let sharePrice = getAmountFormat(element.sharePrice, currency);
+    let totalPrice = getAmountFormat(element.sharePrice * element.numberOfShares, currency);
+    let type = getBuySellTypeString(element.buySellType);
 
     tradeCard.innerHTML = `
         <div class="statLogo">H</div>
@@ -10,44 +17,30 @@ export function createTradeCard(element) {
         <div class="tickerEventStats">
             <div class="stat">
                 <div class="itemStatLabel">Dato</div>
-                <div class="itemStatValue">${element.date}</div>
+                <div class="itemStatValue">${date}</div>
             </div>
 
             <div class="stat">
                 <div class="itemStatLabel">Antal</div>
-                <div class="itemStatValue">${element.count}</div>
+                <div class="itemStatValue">${element.numberOfShares}</div>
             </div>
 
             <div class="stat">
                 <div class="itemStatLabel">Pr stk.</div>
-                <div class="itemStatValue">${element.price}</div>
+                <div class="itemStatValue">${sharePrice}</div>
             </div>
 
             <div class="stat">  
                 <div class="itemStatLabel">I alt</div>
-                <div class="itemStatValue">${element.total}</div>
+                <div class="itemStatValue">${totalPrice}</div>
             </div>
 
             <div class="stat">
                 <div class="itemStatLabel">Type</div>
-                <div class="itemStatValue">${element.type}</div>
+                <div class="itemStatValue">${type}</div>
             </div>
         </div>
     `;
-
-    const elementer = [
-    {
-	    text: "Rediger",
-        onClick: () => { window.location.href = `trade.html?id=${element.id}`; }
-    },
-    {
-	    text: "Slet",
-        onClick: () => { window.location.href = `deleteTrade.html?id=${element.id}`; }
-    }
-    ];
-
-    const popupMenu = createPopupMenu("⋯", elementer);
-    tradeCard.appendChild(popupMenu);
 
     return tradeCard;
 };

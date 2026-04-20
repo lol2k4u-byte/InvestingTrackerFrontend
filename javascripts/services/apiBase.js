@@ -70,6 +70,8 @@ export async function getResponseReqAuth(endpoint, method, obj, message) {
     } else {
         redirect();
     }
+
+    return null;
 };
 
 export async function getResponse(endpoint, method, token, obj, message) {
@@ -85,4 +87,6 @@ export async function getResponse(endpoint, method, token, obj, message) {
         console.error(error);
         message.textContent = "Ingen forbindelse til serveren";
     }
+
+    return null;
 };

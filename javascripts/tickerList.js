@@ -1,4 +1,4 @@
-import { getTickerList } from "./services/getTickerList.js";
+import { getTickerList } from "./services/tickerApi.js";
 import { createTickerCard } from "./tickerCard.js";
 
 const elementer = await getTickerList();
