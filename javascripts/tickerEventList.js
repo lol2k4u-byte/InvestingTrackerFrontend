@@ -19,8 +19,18 @@ function loadParm() {
 }
 
 events.forEach((event) => {
-  const tradeCard = createTradeCard(event.trade, ticker.currency);
-  eventList.appendChild(tradeCard);
+  if (event.trade != null) {
+    const tradeCard = createTradeCard(event.trade, ticker.currency);
+    eventList.appendChild(tradeCard);
+  }
+  if (event.option != null) {
+    const optionCard = createOptionCard(event.option, ticker.currency);
+    eventList.appendChild(optionCard);
+  }
+  if (event.dividend != null) {
+    const dividendCard = createDividendCard(event.dividend, ticker.currency);
+    eventList.appendChild(dividendCard);
+  }
 });
 
 
