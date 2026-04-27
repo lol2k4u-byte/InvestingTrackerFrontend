@@ -74,6 +74,12 @@ body {
   outline: none;
 }
 
+.customCheckbox {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 24px;
+}
+
 
 .customControl:focus {
   border-color: #999;
