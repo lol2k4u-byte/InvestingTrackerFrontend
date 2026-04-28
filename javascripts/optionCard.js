@@ -13,7 +13,7 @@ export function createOptionCard(element, currency) {
     let type = getOptionTypeString(element.callPutType, element.longShortType);
     let strikePrice = getAmountFormat(element.strikePrice, currency);
     let expireDate = getDateFormat(element.expireDate);
-    let itm = "?";
+    let itm = element.isExercised ? "Ja" : "Nej";
 
     optionCard.innerHTML = `
         <div class="statLogo">O</div>

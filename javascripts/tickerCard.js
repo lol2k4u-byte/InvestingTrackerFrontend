@@ -1,5 +1,5 @@
 import { createPopupMenu } from "./popupMenu.js";
-import { getAmountFormat } from "./global.js";
+import { getAmountFormat, getAmountClass, getChangePct } from "./global.js";
 
 export function createTickerCard(element) {
   const card = document.createElement("div");
@@ -8,8 +8,11 @@ export function createTickerCard(element) {
   //const afkastClass = element.afkast.startsWith("-") ? "negativeAmount" : "positiveAmount";
   //const idagClass = element.idag.startsWith("-") ? "negativeAmount" : "positiveAmount";
 
+  const todayChangePct = element.latestPriceChange / ( element.latestPrice - element.latestPriceChange );
+  const todayChangeString = getChangePct(todayChangePct);
+  const todayChangeClass = getAmountClass(element.latestPriceChange);
+
   const afkastClass = "negativeAmount";
-  const idagClass = "positiveAmount";
 
   const cardItemHeader = document.createElement("div");
   cardItemHeader.className = "cardItemHeader";
@@ -46,7 +49,7 @@ export function createTickerCard(element) {
 
       <div class="stat">
         <div class="cardItemStatLabel StatLabel">I dag</div>
-        <div class="cardItemStatValue StatValue ${idagClass}">+3,27%</div>
+        <div class="cardItemStatValue StatValue ${todayChangeClass}">${todayChangeString}</div>
       </div>
 
       <div class="stat">

@@ -1,6 +1,6 @@
 import { getResponseReqAuth } from "./apiBase.js";
 
-export async function createOption(accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, message) {
+export async function createOption(accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts, message) {
     const obj = {
         accountId: accountId,
         symbol: symbol,
@@ -12,7 +12,10 @@ export async function createOption(accountId, symbol, date, callPutType, longSho
         premiumPrice: premiumPrice,
         strikePrice: strikePrice,
         expireDate: expireDate,
-        costs: costs
+        costs: costs,
+        isExercised: isExercised,
+        exerciseDate: exerciseDate,
+        exerciseCosts: exerciseCosts
     };
 
     const endpoint = "Option/create";
@@ -21,7 +24,7 @@ export async function createOption(accountId, symbol, date, callPutType, longSho
     return await getResponseReqAuth(endpoint, method, obj, message);
 }
 
-export async function updateOption(id, accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, latestUpdate, message) {
+export async function updateOption(id, accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts, latestUpdate, message) {
     const obj = {
         id: id,
         accountId: accountId,
@@ -35,8 +38,12 @@ export async function updateOption(id, accountId, symbol, date, callPutType, lon
         strikePrice: strikePrice,
         expireDate: expireDate,
         costs: costs,
+        isExercised: isExercised,
+        exerciseDate: exerciseDate,
+        exerciseCosts: exerciseCosts,
         latestUpdate: latestUpdate
     };
+    console.info(obj);
 
     const endpoint = "Option/update";
     const method = "POST";

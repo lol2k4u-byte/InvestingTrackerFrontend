@@ -44,3 +44,19 @@ export function getOptionTypeString(callPutType, longShortType) {
     }
     return null;
 }
+
+export function getAmountClass(amount) {
+    if (amount > 0) {
+        return "positiveAmount";
+    } else if (amount < 0) {
+        return "negativeAmount";
+    } else {
+        return "";
+    }
+}
+
+export function getChangePct(pct) {
+    const value = (pct * 100).toFixed(2);
+    const sign = pct > 0 ? "+" : "";
+    return `${sign}${value}%`;
+}

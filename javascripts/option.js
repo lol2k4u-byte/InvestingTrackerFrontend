@@ -5,8 +5,10 @@ import { getOption, createOption, updateOption, deleteOption } from "./services/
 
 const elements = loadElements();
 const parm = loadParm();
-const option = await loadForm();
+const optionData = await loadForm();
 loadTitleContainer();
+
+elements.isExercisedElem.addEventListener("change", isExercisedChanged);
 
 document
     .getElementById("optionForm")
@@ -23,20 +25,24 @@ function loadElements() {
         strikePriceElem: document.getElementById("strikePrice"),
         expireDateElem: document.getElementById("expireDate"),
         costsElem: document.getElementById("costs"),
+        isExercisedElem: document.getElementById("isExercised"),
+        exerciseDateElem: document.getElementById("exerciseDate"),
+        exerciseCostsElem: document.getElementById("exerciseCosts"),
         messageElem: document.getElementById("message"),
-        titleContainer: document.getElementById("titleContainer")
+        titleContainer: document.getElementById("titleContainer"),
+        ExercisedContainer: document.getElementById("ExercisedContainer")
     };
 }
 
 function loadTitleContainer() {
 
-    const onDelete = (option === null) ? null : onClickDelete;
+    const onDelete = (optionData === null) ? null : onClickDelete;
     elements.titleContainer.appendChild(getTitleContainer("Option", onDelete));
 }
 
 function loadParm() {
     const params = new URLSearchParams(window.location.search);
-    
+
     return {
         id: params.get("id"),
         accountId: params.get("accountid"),
@@ -44,25 +50,43 @@ function loadParm() {
     };
 }
 
+function isExercisedChanged() {
+    const inputs = elements.ExercisedContainer.querySelectorAll("input");
+    inputs.forEach(input => { input.required = elements.isExercisedElem.checked; });
+
+    if (elements.isExercisedElem.checked) {
+        elements.ExercisedContainer.classList.remove("displayNone");
+
+    } else {
+        elements.ExercisedContainer.classList.add("displayNone");
+    }
+}
+
 async function onClickDelete() {
-    return await deleteOption(option.id, option.latestUpdate, elements.messageElem);
+    return await deleteOption(optionData.option.id, optionData.option.latestUpdate, elements.messageElem);
 }
 
 async function loadForm() {
     elements.dateElem.value = new Date().toISOString().split("T")[0];
 
     if (parm.id != null) {
-        const option = await getOption(parm.id);
-        elements.dateElem.value = option.date;
-        elements.callPutTypeElem.value = option.callPutType;
-        elements.longShortTypeElem.value = option.longShortType;
-        elements.numberOfContractsElem.value = option.numberOfContracts;
-        elements.numberOfSharesPerContractElem.value = option.numberOfSharesPerContract;
-        elements.premiumPriceElem.value = option.premiumPrice;
-        elements.strikePriceElem.value = option.strikePrice;
-        elements.expireDateElem.value = option.expireDate;
-        elements.costsElem.value = option.costs;
-        return option;
+        const optionData = await getOption(parm.id);
+        elements.dateElem.value = optionData.option.date;
+        elements.callPutTypeElem.value = optionData.option.callPutType;
+        elements.longShortTypeElem.value = optionData.option.longShortType;
+        elements.numberOfContractsElem.value = optionData.option.numberOfContracts;
+        elements.numberOfSharesPerContractElem.value = optionData.option.numberOfSharesPerContract;
+        elements.premiumPriceElem.value = optionData.option.premiumPrice;
+        elements.strikePriceElem.value = optionData.option.strikePrice;
+        elements.expireDateElem.value = optionData.option.expireDate;
+        elements.costsElem.value = optionData.option.costs;
+        elements.isExercisedElem.checked = optionData.option.isExercised;
+        if (optionData.option.isExercised) {
+            elements.exerciseDateElem.value = optionData.optionExercise.date;
+            elements.exerciseCostsElem.value = optionData.optionExercise.costs;
+            isExercisedChanged();
+        }
+        return optionData;
     } else {
         return null;
     }
@@ -82,68 +106,72 @@ async function submitOption(event) {
     const strikePrice = getDecimal(elements.strikePriceElem);
     const expireDate = getDate(elements.expireDateElem);
     const costs = getDecimal(elements.costsElem);
+    const isExercised = elements.isExercisedElem.checked;
+    const exerciseDate = getDate(elements.exerciseDateElem);
+    const exerciseCosts = getDecimal(elements.exerciseCostsElem);
 
-    if (isValid(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs)) {
-        const response = await saveOption(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs);
+    if (isValid(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts)) {
+        const response = await saveOption(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts);
         window.history.back();
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
 }
 
-async function saveOption(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs) {
-    if (option === null) {
-        return await createOption(parm.accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, elements.messageElem);
+async function saveOption(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts) {
+    if (optionData === null) {
+        return await createOption(parm.accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts, elements.messageElem);
     } else {
-        return await updateOption(option.id, option.accountId, option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, option.latestUpdate, elements.messageElem);
+        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts, optionData.option.latestUpdate, elements.messageElem);
     }
 }
 
 
-function isValid(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs) {
+function isValid(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts) {
     if (date === null) {
-        console.info("date: " + date);
         return false;
     }
 
     if (callPutType === null) {
-        console.info("callPutType: " + callPutType);
         return false;
     }
 
     if (longShortType === null) {
-        console.info("longShortType: " + longShortType);
         return false;
     }
 
     if (numberOfContracts === null) {
-        console.info("numberOfContracts: " + numberOfContracts);
         return false;
     }
 
     if (numberOfSharesPerContract === null) {
-        console.info("numberOfSharesPerContract: " + numberOfSharesPerContract);
         return false;
     }
 
     if (premiumPrice === null) {
-        console.info("premiumPrice: " + premiumPrice);
         return false;
     }
 
     if (strikePrice === null) {
-        console.info("strikePrice: " + strikePrice);
         return false;
     }
 
     if (expireDate === null) {
-        console.info("expireDate: " + expireDate);
         return false;
     }
 
     if (costs === null) {
-        console.info("costs: " + costs);
         return false;
+    }
+
+    if (isExercised) {
+        if (exerciseDate === null) {
+            return false;
+        }
+
+        if (exerciseCosts === null) {
+            return false;
+        }
     }
 
     return true;

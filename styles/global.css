@@ -44,6 +44,10 @@ body {
   visibility: hidden;
 }
 
+.displayNone {
+  display: none;
+}
+
 .titleContainer {
   display: flex; 
   justify-content: space-between;

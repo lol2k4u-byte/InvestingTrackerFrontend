@@ -71,12 +71,19 @@
 
             <div>
                 <div class="customLabel">Udnyttet</div>
-                <input type="checkbox" id="isExercised" class="customCheckbox" required>
+                <input type="checkbox" id="isExercised" class="customCheckbox">
             </div>
 
-            <div>
-                <div class="customLabel">Udnyttelsesomkostninger</div>
-                <input type="number" step="0.01" id="exerciseCosts" class="customControl" required>
+            <div id="ExercisedContainer" class="displayNone">
+                <div>
+                    <div class="customLabel">Udnyttelsesdato</div>
+                    <input type="date" id="exerciseDate" class="customControl" placeholder="dd-mm-yyyy">
+                </div>
+
+                <div>
+                    <div class="customLabel">Udnyttelsesomkostninger</div>
+                    <input type="number" step="0.01" id="exerciseCosts" class="customControl">
+                </div>
             </div>
 
             <button type="submit" class="customControl" id="submitButton">
