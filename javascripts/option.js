@@ -112,7 +112,7 @@ async function submitOption(event) {
 
     if (isValid(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts)) {
         const response = await saveOption(date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, isExercised, exerciseDate, exerciseCosts);
-        window.history.back();
+        window.location.href = document.referrer;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }

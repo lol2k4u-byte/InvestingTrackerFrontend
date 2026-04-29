@@ -73,7 +73,7 @@ async function submitTrade(event) {
 
     if (isValid(date, buySellType, numberOfShares, sharePrice, costs)) {
         const response = await saveTrade(date, buySellType, numberOfShares, sharePrice, costs);
-        window.history.back();
+        window.location.href = document.referrer;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }

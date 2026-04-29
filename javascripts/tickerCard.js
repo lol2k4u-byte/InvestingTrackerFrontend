@@ -1,18 +1,9 @@
 import { createPopupMenu } from "./popupMenu.js";
-import { getAmountFormat, getAmountClass, getChangePct } from "./global.js";
+import { getAmountFormat, getAmountClass, getChangePct, getNumberFormat, getSignedAmountFormat } from "./global.js";
 
 export function createTickerCard(element) {
   const card = document.createElement("div");
   card.className = "cardItem pointer";
-
-  //const afkastClass = element.afkast.startsWith("-") ? "negativeAmount" : "positiveAmount";
-  //const idagClass = element.idag.startsWith("-") ? "negativeAmount" : "positiveAmount";
-
-  const todayChangePct = element.latestPriceChange / ( element.latestPrice - element.latestPriceChange );
-  const todayChangeString = getChangePct(todayChangePct);
-  const todayChangeClass = getAmountClass(element.latestPriceChange);
-
-  const afkastClass = "negativeAmount";
 
   const cardItemHeader = document.createElement("div");
   cardItemHeader.className = "cardItemHeader";
@@ -31,33 +22,32 @@ export function createTickerCard(element) {
 }
   card.appendChild(cardItemHeader);
 
-  let totalValue = getAmountFormat(element.totalValue, element.currency);
-  let latestPrice = getAmountFormat(element.latestPrice, element.currency);
+  const cardItemStats1 = document.createElement("div");
+  cardItemStats1.className = "cardItemStats";
+
+  cardItemStats1.appendChild(getStat("Værdi", getAmountFormat(element.totalValue, element.currency)));
+  cardItemStats1.appendChild(getStat("Afkast", getChangePct(element.rateOfReturn), getAmountClass(element.rateOfReturn)));
+  cardItemStats1.appendChild(getStat("I dag", getChangePct(element.latestPriceChangePct), getAmountClass(element.latestPriceChangePct)));
+  cardItemStats1.appendChild(getStat("Seneste", getAmountFormat(element.latestPrice, element.currency)));
+
+  card.appendChild(cardItemStats1);
   
-  const cardItemStats = document.createElement("div");
-  cardItemStats.className = "cardItemStats";
-  cardItemStats.innerHTML = `
-      <div class="stat">
-        <div class="cardItemStatLabel StatLabel">Værdi</div>
-        <div class="cardItemStatValue StatValue">${totalValue}</div>
-      </div>
 
-      <div class="stat">
-        <div class="cardItemStatLabel StatLabel">Afkast</div>
-        <div class="cardItemStatValue StatValue ${afkastClass}">-1,23%</div>
-      </div>
 
-      <div class="stat">
-        <div class="cardItemStatLabel StatLabel">I dag</div>
-        <div class="cardItemStatValue StatValue ${todayChangeClass}">${todayChangeString}</div>
-      </div>
+  const cardItemStats2 = document.createElement("div");
+  cardItemStats2.className = "cardItemStats cardItemStatsMargin";
 
-      <div class="stat">
-        <div class="cardItemStatLabel StatLabel">Seneste</div>
-        <div class="cardItemStatValue StatValue">${latestPrice}</div>
-      </div>
-  `;
-  card.appendChild(cardItemStats);
+  cardItemStats2.appendChild(getStat("Antal", getNumberFormat(element.numberOfShares)));
+
+  if (element.costBasis) {
+    cardItemStats2.appendChild(getStat("Købspris", getAmountFormat(element.costBasis, element.currency)));
+  }
+
+  if (element.totalProfitLoss) {
+    cardItemStats2.appendChild(getStat("Profit/tab", getSignedAmountFormat(element.totalProfitLoss, element.currency), getAmountClass(element.totalProfitLoss)));
+  }
+
+  card.appendChild(cardItemStats2);
   
   
   const parm = `accountid=${element.accountId}&symbol=${element.symbol}`;
@@ -85,4 +75,24 @@ export function createTickerCard(element) {
   });
 
   return card;
+}
+
+function getStat(label, value, valueClass = null) {
+  const stat = document.createElement("div");
+  stat.className ="stat";
+
+  const labelElem = document.createElement("div");
+  labelElem.className = "cardItemStatLabel StatLabel";
+  labelElem.textContent = label;
+  stat.appendChild(labelElem);
+
+  const valueElem = document.createElement("div");
+  valueElem.className = "cardItemStatValue StatValue";
+  if (valueClass) {
+    valueElem.classList.add(valueClass);
+  }
+  valueElem.textContent = value;
+  stat.appendChild(valueElem);
+
+  return stat;
 }

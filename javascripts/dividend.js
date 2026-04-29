@@ -65,7 +65,7 @@ async function submitDividend(event) {
 
     if (isValid(date, numberOfShares, dividendValue)) {
         await saveDividend(date, numberOfShares, dividendValue);
-        window.history.back();
+        window.location.href = document.referrer;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }

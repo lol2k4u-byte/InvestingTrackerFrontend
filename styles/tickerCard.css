@@ -98,6 +98,10 @@
   gap: 24px;
 }
 
+.cardItemStatsMargin {
+  margin-top: 10px;
+}
+
 .cardItemStatLabel {
   font-size: 26px;
   margin-bottom: 10px;
@@ -147,6 +151,7 @@
   .cardItemLogo img { 
   width: 36px; 
   height: 36px; 
+  }
 
   .cardItemLogoText {
     font-size: 22px;

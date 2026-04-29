@@ -9,15 +9,29 @@ export function getDateFormat(date) {
 }
 
 export function getAmountFormat(amount, currency) {
+    return getAmountFormatCommon(amount, currency, "");
+}
+
+export function getSignedAmountFormat(amount, currency) {
+    let sign = "";
+    if (amount > 0) { sign = "+"; }
+    else if (amount < 0) { sign = "-"; }
+
+    return getAmountFormatCommon(amount, currency, sign);
+}
+
+function getAmountFormatCommon(amount, currency, sign = null) {
     if (amount == null || !currency) {
         return "";
     }
 
-    return `${currency} ${Number(amount).toLocaleString("da-DK", {
+    return `${currency} ${sign}${Number(amount).toLocaleString("da-DK", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     })}`;
 }
+
+
 
 export function getNumberFormat(amount) {
     if (amount == null) {
