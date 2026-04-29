@@ -7,7 +7,6 @@ export function getDate(element) {
 
     const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(value);
     if (!isValidFormat) {
-        alert("not valid");
         return null;
     }
 

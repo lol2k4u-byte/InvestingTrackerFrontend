@@ -20,9 +20,9 @@ export function getTitleContainer(title, onDelete) {
     if (onDelete === null) {
         deleteButton.className = "hidden";
     } else {
-        deleteButton.onclick = () => {
+        deleteButton.onclick = async () => {
             if (confirm("Er du sikker på, at du vil slette?")) {
-                onDelete();
+                await onDelete();
                 window.history.back();
             }
         };
