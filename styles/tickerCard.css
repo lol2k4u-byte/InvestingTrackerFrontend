@@ -5,51 +5,8 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   border: 1px solid #ececec;
   position: relative;
-}
-
-.cardItemMenu-wrapper {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.cardItemMenu-button {
-  background: none;
-  border: none;
-  font-size: 28px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-
-.cardItemMenu-button:hover {
-  background: #ececec;
-}
-
-.cardItemPopup-menu {
-  display: none;
-  position: absolute;
-  top: 40px;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  min-width: 140px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-  z-index: 100;
-}
-
-.cardItemPopup-menu.show {
-  display: block;
-}
-
-.cardItemMenu-item {
-  padding: 12px 16px;
-  cursor: pointer;
-}
-
-.cardItemMenu-item:hover {
-  background: #f5f5f5;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 
@@ -73,6 +30,19 @@
 
 .cardItemLogo img { 
   object-fit: contain; 
+}
+
+.cardItemMenu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  min-width: 140px;
+}
+
+.cardItemMenuButton {
+  position: absolute;
+  right: 0px;
+  top: 0px;
 }
 
 .cardItemLogoText {

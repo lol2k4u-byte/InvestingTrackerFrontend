@@ -1,36 +1,49 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>InvestingTracker</title>
+  <title>InvestingTracker</title>
 
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-<link rel="stylesheet" href="styles/global.css">
-<link rel="stylesheet" href="styles/tickerList.css">
-<link rel="stylesheet" href="styles/tickerCard.css">
+  <link rel="stylesheet" href="styles/global.css">
+  <link rel="stylesheet" href="styles/index.css">
+  <link rel="stylesheet" href="styles/tickerList.css">
+  <link rel="stylesheet" href="styles/tickerCard.css">
 
 
 </head>
+
 <body>
 
 
 
   <div class="container">
-<h1>InvestingTracker</h1>
-<p id="ko">Indlæser...</p>
+    <h1>InvestingTracker</h1>
 
-    <input
-      type="text"
-      id="soegefelt"
-      class="customControl"
-      placeholder="Søg efter navn..."
-    />
+    <form class="searchForm" id="searchForm">
+      <div class="searchWrapper">
+        <input type="text" id="soegefelt" class="customControl noMargin" placeholder="Søg efter navn..." />
+        
+        <div class="dropdownList popup-menu" id="dropdownList">
+          <div class="menu-item">Test</div>
+          <div class="menu-item">Test2</div>
+        </div>
+      </div>
+      <button type="submit" id="searchButton">🔎︎</button>
+    </form>
 
-    <div id="liste" class="liste"/>
-  </div>
-<script type="module" src="javascripts/tickerList.js"></script>
-<script type="module" src="javascripts/hidePopupMenu.js"></script>
-    
+
+
+
+
+    <div id="liste" class="liste">
+    </div>
+    <script type="module" src="javascripts/index.js"></script>
+    <script type="module" src="javascripts/tickerList.js"></script>
+    <script type="module" src="javascripts/hidePopupMenu.js"></script>
+
 
 </body>
+
 </html>

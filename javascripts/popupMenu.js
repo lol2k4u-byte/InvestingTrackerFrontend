@@ -3,7 +3,7 @@ export function createPopupMenu(sign, elements) {
   menu.className = "menu-wrapper";
 
   const button = document.createElement("button");
-  button.className = "menu-button";
+  button.className = "menu-button cardItemMenuButton";
   button.textContent = sign;
   button.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -12,7 +12,7 @@ export function createPopupMenu(sign, elements) {
   menu.appendChild(button);
 
   const popupMenu = document.createElement("div");
-  popupMenu.className = "popup-menu";
+  popupMenu.className = "popup-menu cardItemMenu";
   popupMenu.addEventListener("click", (e) => {
     e.stopPropagation();
   });
