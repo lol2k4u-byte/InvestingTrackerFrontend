@@ -1,5 +1,6 @@
 import { getTitleContainer } from "./titleContainer.js";
 import { getInt, getDecimal, getEnum, getDate } from "./form.js";
+import { loadAccounts } from "./accountDropdown.js";
 import { getTrade, createTrade, updateTrade, deleteTrade } from "./services/tradeApi.js";
 
 
@@ -7,6 +8,7 @@ const elements = loadElements();
 const parm = loadParm();
 const trade = await loadForm();
 loadTitleContainer();
+await loadAccountDropdown();
 
 document
     .getElementById("tradeForm")
@@ -28,6 +30,12 @@ function loadTitleContainer() {
 
     const onDelete = (trade === null) ? null : onClickDelete;
     elements.titleContainer.appendChild(getTitleContainer("Trade", onDelete));
+}
+
+async function loadAccountDropdown() {
+    if (parm.id === null && parm.accountId === null) {
+        await loadAccounts(elements.accountIdElem, elements.messageElem);
+    }
 }
 
 function loadParm() {
