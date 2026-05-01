@@ -33,8 +33,10 @@ function loadTitleContainer() {
 }
 
 async function loadAccountDropdown() {
-    if (parm.id === null && parm.accountId === null) {
+    if (parm.accountId === null) {
         await loadAccounts(elements.accountIdElem, elements.messageElem);
+
+        elements.accountIdElem.required = true;
     }
 }
 
