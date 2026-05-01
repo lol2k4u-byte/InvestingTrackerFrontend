@@ -1,65 +1,44 @@
-<!DOCTYPE html>
-<html>
+<form id="tradeForm">
 
-<head>
-    <title>InvestingTracker</title>
-
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="styles/global.css">
-
-</head>
-
-<body>
-
-    <div class="container">
-        <div id="titleContainer">
-            
-
-        </div>
-
-        <form id="tradeForm">
-            <div>
-                <div class="customLabel">Dato</div>
-                <input type="date" id="date" class="customControl" placeholder="dd-mm-yyyy" required>
-            </div>
-
-            <div>
-                <div class="customLabel">Køb/salg</div>
-                <select id="buySellType" class="customControl" required>
-                    <option value="0">Køb</option>
-                    <option value="1">Salg</option>
-                </select>
-            </div>
-
-            <div>
-                <div class="customLabel">Antal aktier</div>
-                <input type="number" id="numberOfShares" class="customControl" required>
-            </div>
-
-            <div>
-                <div class="customLabel">Pris</div>
-                <input type="number" step="0.01" id="sharePrice" class="customControl" required>
-            </div>
-
-            <div>
-                <div class="customLabel">Omkostninger</div>
-                <input type="number" step="0.01" id="costs" class="customControl" required>
-            </div>
-
-            <button type="submit" class="customControl" id="submitButton">
-                Gem
-            </button>
-
-            <div class="message" id="message"></div>
-
-        </form>
+    <div>
+        <div class="customLabel">Konto</div>
+        <select id="accountId" class="customControl" required>
+            <!-- options kommer senere -->
+        </select>
     </div>
 
+    <div>
+        <div class="customLabel">Dato</div>
+        <input type="date" id="date" class="customControl" placeholder="dd-mm-yyyy" required>
+    </div>
 
+    <div>
+        <div class="customLabel">Køb/salg</div>
+        <select id="buySellType" class="customControl" required>
+            <option value="0">Køb</option>
+            <option value="1">Salg</option>
+        </select>
+    </div>
 
-    <script type="module" src="javascripts/trade.js"></script>
+    <div>
+        <div class="customLabel">Antal aktier</div>
+        <input type="number" id="numberOfShares" class="customControl" required>
+    </div>
 
+    <div>
+        <div class="customLabel">Pris</div>
+        <input type="number" step="0.01" id="sharePrice" class="customControl" required>
+    </div>
 
-</body>
+    <div>
+        <div class="customLabel">Omkostninger</div>
+        <input type="number" step="0.01" id="costs" class="customControl" required>
+    </div>
 
-</html>
+    <button type="submit" class="customControl" id="submitButton">
+        Gem
+    </button>
+
+    <div class="message" id="message"></div>
+
+</form>
