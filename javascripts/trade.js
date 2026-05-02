@@ -81,26 +81,31 @@ async function submitTrade(event) {
     const numberOfShares = getInt(elements.numberOfSharesElem);
     const sharePrice = getDecimal(elements.sharePriceElem);
     const costs = getDecimal(elements.costsElem);
+    const accountId = parm.accountId ?? getInt(elements.accountIdElem);
 
-    if (isValid(date, buySellType, numberOfShares, sharePrice, costs)) {
-        const response = await saveTrade(date, buySellType, numberOfShares, sharePrice, costs);
+    if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs)) {
+        const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, costs);
         window.location.href = document.referrer;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
 }
 
-async function saveTrade(date, buySellType, numberOfShares, sharePrice, costs) {
+async function saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, costs) {
     if (trade === null) {
-        return await createTrade(parm.accountId, parm.symbol, date, buySellType, numberOfShares, sharePrice, costs, elements.messageElem);
+        return await createTrade(accountId, parm.symbol, date, buySellType, numberOfShares, sharePrice, costs, elements.messageElem);
     } else {
         return await updateTrade(trade.id, trade.accountId, trade.symbol, date, buySellType, numberOfShares, sharePrice, costs, trade.latestUpdate, elements.messageElem);
     }
 }
 
 
-function isValid(date, buySellType, numberOfShares, sharePrice, costs) {
-    if (date === null) {
+function isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs) {
+    if (accountId === null) {
+        return false;
+    }
+
+     if (date === null) {
         return false;
     }
 
