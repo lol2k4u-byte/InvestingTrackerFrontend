@@ -25,3 +25,10 @@ export async function getTickerEvents(accountId, symbol, message) {
     
     return await getResponseReqAuth(endpoint, method, null, message);
 }
+
+export async function getSearch(query, message) {
+    const endpoint = `Ticker/search?query=${query}`;
+    const method = "GET";
+    
+    return await getResponseReqAuth(endpoint, method, null, message);
+}
