@@ -4,9 +4,6 @@ export async function loadAccounts(selectElement, message) {
 
     const accounts = await getAccounts(message);
 
-    // ryd eksisterende options
-    selectElement.innerHTML = "";
-
     accounts.forEach(account => {
         const option = document.createElement("option");
         option.value = account.accountId;

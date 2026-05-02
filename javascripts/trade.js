@@ -16,6 +16,7 @@ document
 
 function loadElements() {
     return {
+        accountIdElem: document.getElementById("accountId"),
         dateElem: document.getElementById("date"),
         buySellTypeElem: document.getElementById("buySellType"),
         numberOfSharesElem: document.getElementById("numberOfShares"),
