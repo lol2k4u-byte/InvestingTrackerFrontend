@@ -81,8 +81,6 @@ async function submitTrade(event) {
     const numberOfShares = getInt(elements.numberOfSharesElem);
     const sharePrice = getDecimal(elements.sharePriceElem);
     const costs = getDecimal(elements.costsElem);
-    alert(parm.accountId);
-    alert(getInt(elements.accountIdElem));
     const accountId = parm.accountId ?? getInt(elements.accountIdElem);
 
     if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs)) {
