@@ -19,6 +19,7 @@ document
 function loadElements() {
     return {
         accountIdElem: document.getElementById("accountId"),
+        accountIdContainerElem: document.getElementById("accountIdContainer"),
         dateElem: document.getElementById("date"),
         callPutTypeElem: document.getElementById("callPutType"),
         longShortTypeElem: document.getElementById("longShortType"),
@@ -48,7 +49,7 @@ async function loadAccountDropdown() {
         await loadAccounts(elements.accountIdElem, elements.messageElem);
         elements.accountIdElem.required = true;
     } else {
-        elements.accountIdElem.classList.add("displayNone");
+        elements.accountIdContainerElem.classList.add("displayNone");
     }
 }
 

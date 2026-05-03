@@ -17,6 +17,7 @@ document
 function loadElements() {
     return {
         accountIdElem: document.getElementById("accountId"),
+        accountIdContainerElem: document.getElementById("accountIdContainer"),
         dateElem: document.getElementById("date"),
         buySellTypeElem: document.getElementById("buySellType"),
         numberOfSharesElem: document.getElementById("numberOfShares"),
@@ -38,7 +39,7 @@ async function loadAccountDropdown() {
         await loadAccounts(elements.accountIdElem, elements.messageElem);
         elements.accountIdElem.required = true;
     } else {
-        elements.accountIdElem.classList.add("displayNone");
+        elements.accountIdContainerElem.classList.add("displayNone");
     }
 }
 
