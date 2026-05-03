@@ -2,7 +2,12 @@ import { getResponseReqAuth } from "./apiBase.js";
 
 
 export async function getTickerInfo(accountId, symbol, message) {
-    const endpoint = `Ticker/info?accountid=${accountId}&symbol=${symbol}`;
+    let endpoint = `Ticker/info?symbol=${symbol}`;
+
+    if (accountId) {
+        endpoint = endpoint + `&accountid=${accountId}`;
+    }
+
     const method = "GET";
     
     return await getResponseReqAuth(endpoint, method, null, message);
