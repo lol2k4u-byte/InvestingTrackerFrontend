@@ -1,11 +1,13 @@
 import { getTitleContainer } from "./titleContainer.js";
 import { getInt, getDecimal, getDate } from "./form.js";
+import { loadAccounts } from "./accountDropdown.js";
 import { getDividend, createDividend, updateDividend, deleteDividend } from "./services/dividendApi.js";
 
 const elements = loadElements();
 const parm = loadParm();
 const dividend = await loadForm();
 loadTitleContainer();
+await loadAccountDropdown();
 
 document
     .getElementById("dividendForm")
@@ -13,6 +15,7 @@ document
 
 function loadElements() {
     return {
+        accountIdElem: document.getElementById("accountId"),
         dateElem: document.getElementById("date"),
         numberOfSharesElem: document.getElementById("numberOfShares"),
         dividendValueElem: document.getElementById("dividendValue"),
@@ -24,6 +27,15 @@ function loadElements() {
 function loadTitleContainer() {
     const onDelete = (dividend === null) ? null : onClickDelete;
     elements.titleContainer.appendChild(getTitleContainer("Dividend", onDelete));
+}
+
+async function loadAccountDropdown() {
+    if (parm.accountId === null) {
+        await loadAccounts(elements.accountIdElem, elements.messageElem);
+        elements.accountIdElem.required = true;
+    } else {
+        elements.accountIdElem.classList.add("displayNone");
+    }
 }
 
 function loadParm() {
@@ -62,19 +74,20 @@ async function submitDividend(event) {
     const date = getDate(elements.dateElem);
     const numberOfShares = getInt(elements.numberOfSharesElem);
     const dividendValue = getDecimal(elements.dividendValueElem);
+    const accountId = parm.accountId ?? getInt(elements.accountIdElem);
 
-    if (isValid(date, numberOfShares, dividendValue)) {
-        await saveDividend(date, numberOfShares, dividendValue);
+    if (isValid(accountId, date, numberOfShares, dividendValue)) {
+        await saveDividend(accountId, date, numberOfShares, dividendValue);
         window.location.href = document.referrer;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
 }
 
-async function saveDividend(date, numberOfShares, dividendValue) {
+async function saveDividend(accountId, date, numberOfShares, dividendValue) {
     if (dividend === null) {
         return await createDividend(
-            parm.accountId,
+            accountId,
             parm.symbol,
             date,
             numberOfShares,
@@ -95,7 +108,11 @@ async function saveDividend(date, numberOfShares, dividendValue) {
     }
 }
 
-function isValid(date, numberOfShares, dividendValue) {
+function isValid(accountId, date, numberOfShares, dividendValue) {
+    if (accountId === null) {
+        return false;
+    }
+
     if (date === null) {
         return false;
     }

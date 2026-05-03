@@ -6,7 +6,7 @@ export async function loadAccounts(selectElement, message) {
 
     accounts.forEach(account => {
         const option = document.createElement("option");
-        option.value = account.accountId;
+        option.value = account.id;
         option.textContent = account.name;
 
         selectElement.appendChild(option);

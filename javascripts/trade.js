@@ -36,8 +36,9 @@ function loadTitleContainer() {
 async function loadAccountDropdown() {
     if (parm.accountId === null) {
         await loadAccounts(elements.accountIdElem, elements.messageElem);
-
         elements.accountIdElem.required = true;
+    } else {
+        elements.accountIdElem.classList.add("displayNone");
     }
 }
 
@@ -102,26 +103,32 @@ async function saveTrade(accountId, date, buySellType, numberOfShares, sharePric
 
 function isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs) {
     if (accountId === null) {
+        alert("accountId: " + accountId);
         return false;
     }
 
      if (date === null) {
+        alert("date: " + date);
         return false;
     }
 
     if (buySellType === null) {
+        alert("buySellType: " + buySellType);
         return false;
     }
 
     if (numberOfShares === null) {
+        alert("numberOfShares: " + numberOfShares);
         return false;
     }
 
     if (sharePrice === null) {
+        alert("sharePrice: " + sharePrice);
         return false;
     }
 
     if (costs === null) {
+        alert("costs: " + costs);
         return false;
     }
 
