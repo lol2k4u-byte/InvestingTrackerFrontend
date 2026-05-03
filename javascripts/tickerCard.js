@@ -8,18 +8,36 @@ export function createTickerCard(element) {
   const cardItemHeader = document.createElement("div");
   cardItemHeader.className = "cardItemHeader";
 
-  if (element.logo == null) {
+  if (element.logo === null) {
     const symbolChar = element.symbol?.[0] ?? "";
     cardItemHeader.innerHTML = `
       <div class="cardItemLogoText">${symbolChar}</div>
       <div class="cardItemName">${element.companyName}</div>
     `;
   } else {
+    const cardItemLogo = document.createElement("div");
+    cardItemLogo.className = "cardItemLogo";
+    const img = document.createElement("img");
+    img.className = "cardItemLogo";
+    img.src = element.logo;
+    cardItemLogo.appendChild(img);
+    img.onerror = () => {
+      img.style.display = "none";
+    };
+
+    const cardItemName = document.createElement("div");
+    cardItemName.className = "cardItemName";
+    cardItemName.textContent = element.companyName;
+
+    cardItemHeader.appendChild(cardItemLogo);
+    cardItemHeader.appendChild(cardItemName);
+    /*
     cardItemHeader.innerHTML = `
       <div class="cardItemLogo"><img class="cardItemLogo" src="${element.logo}"/></div>
       <div class="cardItemName">${element.companyName}</div>
     `;
-}
+    */
+  }
   card.appendChild(cardItemHeader);
 
   const cardItemStats1 = document.createElement("div");
@@ -31,7 +49,7 @@ export function createTickerCard(element) {
   cardItemStats1.appendChild(getStat("Seneste", getAmountFormat(element.latestPrice, element.currency)));
 
   card.appendChild(cardItemStats1);
-  
+
 
 
   const cardItemStats2 = document.createElement("div");
@@ -48,8 +66,8 @@ export function createTickerCard(element) {
   }
 
   card.appendChild(cardItemStats2);
-  
-  
+
+
   let parm = `symbol=${element.symbol}`;
 
   if (element.accountId) {
@@ -57,18 +75,18 @@ export function createTickerCard(element) {
   }
 
   const elementer = [
-  {
-    text: "Handel",
-    onClick: () => { window.location.href = `trade.html?${parm}`; }
-  },
-  {
-    text: "Option",
-    onClick: () => { window.location.href = `option.html?${parm}`; }
-  },
-  {
-    text: "Udbytte",
-    onClick: () => { window.location.href = `dividend.html?${parm}`; }
-  },
+    {
+      text: "Handel",
+      onClick: () => { window.location.href = `trade.html?${parm}`; }
+    },
+    {
+      text: "Option",
+      onClick: () => { window.location.href = `option.html?${parm}`; }
+    },
+    {
+      text: "Udbytte",
+      onClick: () => { window.location.href = `dividend.html?${parm}`; }
+    },
   ];
 
   const popupMenu = createPopupMenu("⋯", elementer);
@@ -83,7 +101,7 @@ export function createTickerCard(element) {
 
 function getStat(label, value, valueClass = null) {
   const stat = document.createElement("div");
-  stat.className ="stat";
+  stat.className = "stat";
 
   const labelElem = document.createElement("div");
   labelElem.className = "cardItemStatLabel StatLabel";
