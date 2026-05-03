@@ -23,6 +23,7 @@ function loadElements() {
         numberOfSharesElem: document.getElementById("numberOfShares"),
         sharePriceElem: document.getElementById("sharePrice"),
         costsElem: document.getElementById("costs"),
+        costsExchangeRateElem: document.getElementById("costsExchangeRate"),
         messageElem: document.getElementById("message"),
         titleContainer: document.getElementById("titleContainer")
     };
@@ -67,6 +68,7 @@ async function loadForm() {
         elements.numberOfSharesElem.value = trade.numberOfShares;
         elements.sharePriceElem.value = trade.sharePrice;
         elements.costsElem.value = trade.costs;
+        elements.costsExchangeRateElem.value = 1;
         return trade;
     } else {
         return null;
@@ -83,53 +85,53 @@ async function submitTrade(event) {
     const numberOfShares = getInt(elements.numberOfSharesElem);
     const sharePrice = getDecimal(elements.sharePriceElem);
     const costs = getDecimal(elements.costsElem);
+    const costsExchangeRate = getDecimal(elements.costsExchangeRateElem);
     const accountId = parm.accountId ?? getInt(elements.accountIdElem);
 
-    if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs)) {
-        const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, costs);
+    if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs, costsExchangeRate)) {
+        const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, costs, costsExchangeRate);
         window.location.href = document.referrer;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
 }
 
-async function saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, costs) {
+async function saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, costs, costsExchangeRate) {
+    const costsInTickerCurrency = costs / costsExchangeRate;
     if (trade === null) {
-        return await createTrade(accountId, parm.symbol, date, buySellType, numberOfShares, sharePrice, costs, elements.messageElem);
+        return await createTrade(accountId, parm.symbol, date, buySellType, numberOfShares, sharePrice, costsInTickerCurrency, elements.messageElem);
     } else {
-        return await updateTrade(trade.id, trade.accountId, trade.symbol, date, buySellType, numberOfShares, sharePrice, costs, trade.latestUpdate, elements.messageElem);
+        return await updateTrade(trade.id, trade.accountId, trade.symbol, date, buySellType, numberOfShares, sharePrice, costsInTickerCurrency, trade.latestUpdate, elements.messageElem);
     }
 }
 
 
-function isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs) {
+function isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs, costsExchangeRate) {
     if (accountId === null) {
-        alert("accountId: " + accountId);
         return false;
     }
 
      if (date === null) {
-        alert("date: " + date);
         return false;
     }
 
     if (buySellType === null) {
-        alert("buySellType: " + buySellType);
         return false;
     }
 
     if (numberOfShares === null) {
-        alert("numberOfShares: " + numberOfShares);
         return false;
     }
 
     if (sharePrice === null) {
-        alert("sharePrice: " + sharePrice);
         return false;
     }
 
     if (costs === null) {
-        alert("costs: " + costs);
+        return false;
+    }
+
+    if (costsExchangeRate === null) {
         return false;
     }
 

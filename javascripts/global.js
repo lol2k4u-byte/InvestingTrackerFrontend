@@ -13,9 +13,7 @@ export function getAmountFormat(amount, currency) {
 }
 
 export function getSignedAmountFormat(amount, currency) {
-    let sign = "";
-    if (amount > 0) { sign = "+"; }
-    else if (amount < 0) { sign = "-"; }
+    const sign = amount > 0 ? "+" : "";
 
     return getAmountFormatCommon(amount, currency, sign);
 }
