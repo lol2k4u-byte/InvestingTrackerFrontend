@@ -50,7 +50,7 @@ function removeToken() {
 }
 
 function redirect() {
-    window.location.href = "/InvestingTrackerFrontend/login.html";
+    window.location.href = `login.html`;
 }
 
 export async function getResponseReqAuth(endpoint, method, obj, message) {

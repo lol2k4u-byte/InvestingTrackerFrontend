@@ -129,7 +129,7 @@ async function submitOption(event) {
 
     if (isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, costsExchangeRate, isExercised, exerciseDate, exerciseCosts)) {
         const response = await saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, costsExchangeRate, isExercised, exerciseDate, exerciseCosts);
-        window.location.href = `ticker.html?symbol=${parm.symbol}&${accountId}`;
+        window.location.href = `ticker.html?symbol=${parm.symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
