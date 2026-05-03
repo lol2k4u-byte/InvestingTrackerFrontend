@@ -90,7 +90,7 @@ async function submitTrade(event) {
 
     if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, costs, costsExchangeRate)) {
         const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, costs, costsExchangeRate);
-        window.location.href = document.referrer;
+        window.location.href = `ticker.html?symbol=${parm.symbol}&${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }

@@ -79,7 +79,7 @@ async function submitDividend(event) {
 
     if (isValid(accountId, date, numberOfShares, dividendValue)) {
         await saveDividend(accountId, date, numberOfShares, dividendValue);
-        window.location.href = document.referrer;
+        window.location.href = `ticker.html?symbol=${parm.symbol}&${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }

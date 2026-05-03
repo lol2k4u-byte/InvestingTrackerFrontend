@@ -6,6 +6,11 @@ body {
   color: #111;
 }
 
+.mainTitle {
+  color: #111;
+  text-decoration: none;
+}
+
 .message {
   color: red;
   margin-top: 5px;
