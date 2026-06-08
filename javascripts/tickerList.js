@@ -1,7 +1,7 @@
 import { getTickerList } from "./services/tickerApi.js";
 import { createTickerCard } from "./tickerCard.js";
 
-const elementer = await getTickerList();
+const elementer = await getTickerList(true, null);
 
 
 const liste = document.getElementById("liste");

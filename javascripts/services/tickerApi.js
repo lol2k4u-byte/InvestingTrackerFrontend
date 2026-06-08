@@ -13,9 +13,9 @@ export async function getTickerInfo(accountId, symbol, message) {
     return await getResponseReqAuth(endpoint, method, null, message);
 };
 
-export async function getTickerList(message) {
+export async function getTickerList(activeOnly, message) {
 
-    const endpoint = "Ticker";
+    const endpoint = `Ticker?activeOnly=${activeOnly}`;
     const method = "GET";
     const obj = null;
 

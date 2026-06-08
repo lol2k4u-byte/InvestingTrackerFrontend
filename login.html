@@ -6,14 +6,9 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 <link rel="stylesheet" href="styles/global.css">
-<link rel="stylesheet" href="styles/login.css">
 
 </head>
 <body>
-
-  <div id="connectedDiv" class="connected">
-    Connected..
-  </div>
 
   <div class="container">
 
@@ -21,7 +16,7 @@
       <form id="loginForm">
         <input type="text" id="username" autocomplete="username" class="customControl" placeholder="Brugernavn..." required>
         <input type="password" id="password" autocomplete="current-password" class="customControl" placeholder="Adgangskode..." required>
-        <button type="submit" class="customControl">Log ind</button>
+        <button id="loginButton" type="submit" class="customControl" disabled>Log ind</button>
         <div class="message" id="message"></div>
       </form>
     
