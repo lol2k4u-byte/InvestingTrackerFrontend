@@ -43,7 +43,6 @@ export async function updateOption(id, accountId, symbol, date, callPutType, lon
         exerciseCosts: exerciseCosts,
         latestUpdate: latestUpdate
     };
-    console.info(obj);
 
     const endpoint = "Option/update";
     const method = "POST";

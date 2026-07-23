@@ -37,3 +37,17 @@ export async function getSearch(query, message) {
     
     return await getResponseReqAuth(endpoint, method, null, message);
 }
+
+export async function hideTicker(accountId, symbol, hide, latestUpdate, message) {
+    const endpoint = `Ticker/hide`;
+    const method = "POST";
+
+    const obj = {
+        accountId: accountId,
+        symbol: symbol,
+        hide: hide,
+        latestUpdate: latestUpdate
+    };
+    
+    return await getResponseReqAuth(endpoint, method, obj, message);
+}

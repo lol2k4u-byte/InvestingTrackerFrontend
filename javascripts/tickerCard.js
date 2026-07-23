@@ -1,5 +1,6 @@
 import { createPopupMenu } from "./popupMenu.js";
 import { getAmountFormat, getAmountClass, getChangePct, getNumberFormat, getSignedAmountFormat } from "./global.js";
+import { hideTicker } from "./services/tickerApi.js";
 
 export function createTickerCard(element) {
   const card = document.createElement("div");
@@ -74,7 +75,7 @@ export function createTickerCard(element) {
     parm = parm + `&accountid=${element.accountId}`;
   }
 
-  const elementer = [
+  let elementer = [
     {
       text: "Handel",
       onClick: () => { window.location.href = `trade.html?${parm}`; }
@@ -86,8 +87,22 @@ export function createTickerCard(element) {
     {
       text: "Udbytte",
       onClick: () => { window.location.href = `dividend.html?${parm}`; }
-    },
+    }
   ];
+
+  if (element.accountId != null && element.isHidden != null) {
+    if (element.isHidden === true) {
+      elementer.push({
+        text: "Vis",
+        onClick: () => { hideCardTicker(element, false); }
+      })
+    } else {
+      elementer.push({
+        text: "Skjul",
+        onClick: () => { hideCardTicker(element, true); }
+      })
+    }
+  }
 
   const popupMenu = createPopupMenu("⋯", elementer);
   card.appendChild(popupMenu);
@@ -97,6 +112,11 @@ export function createTickerCard(element) {
   });
 
   return card;
+}
+
+async function hideCardTicker(element, hide) {
+  await hideTicker(element.accountId, element.symbol, hide, element.accountTickerLatestUpdate, null);
+  window.location.reload();
 }
 
 function getStat(label, value, valueClass = null) {
