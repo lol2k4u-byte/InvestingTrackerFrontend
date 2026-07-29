@@ -6,6 +6,7 @@
 
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/exchangeRateInfo.css">
 
 </head>
 
@@ -22,6 +23,7 @@
         </div>
 
         <form id="optionForm">
+            <datalist id="currencyDatalist"></datalist>
 
             <div id="accountIdContainer">
                 <div class="customLabel">Konto</div>
@@ -60,14 +62,26 @@
                 <input type="number" id="numberOfSharesPerContract" class="customControl" required>
             </div>
 
-            <div>
-                <div class="customLabel">Premium</div>
-                <input type="number" step="0.01" id="premiumPrice" class="customControl" required>
+            <div class="split2">
+                <div>
+                    <div class="customLabel">Premium</div>
+                    <input type="number" step="0.01" id="premiumPrice" class="customControl" required>
+                </div>
+                <div>
+                    <div class="customLabel">Valuta</div>
+                    <input list="currencyDatalist" id="premiumPriceCurrency" class="customControl" required>
+                </div>
             </div>
 
-            <div>
-                <div class="customLabel">Strike</div>
-                <input type="number" step="0.01" id="strikePrice" class="customControl" required>
+            <div class="split2">
+                <div>
+                    <div class="customLabel">Strike</div>
+                    <input type="number" step="0.01" id="strikePrice" class="customControl" required>
+                </div>
+                <div>
+                    <div class="customLabel">Valuta</div>
+                    <input list="currencyDatalist" id="strikePriceCurrency" class="customControl" required>
+                </div>
             </div>
 
             <div>
@@ -75,15 +89,14 @@
                 <input type="date" id="expireDate" class="customControl" placeholder="dd-mm-yyyy" required>
             </div>
 
-            <div>
-                <div class="customLabel">Omkostninger</div>
-                <input type="number" step="0.01" id="costs" class="customControl" required>
-            </div>
-
-            <div>
-                <div class="customLabel">Kurs for omkostninger</div>
+            <div class="split2">
                 <div>
-                    <input type="number" step="0.000001" id="costsExchangeRate" class="customControl" required>
+                    <div class="customLabel">Omkostninger</div>
+                    <input type="number" step="0.01" id="costs" class="customControl" required>
+                </div>
+                <div>
+                    <div class="customLabel">Valuta</div>
+                    <input list="currencyDatalist" id="costsCurrency" class="customControl" required>
                 </div>
             </div>
 
@@ -95,13 +108,22 @@
             <div id="ExercisedContainer" class="displayNone">
                 <div>
                     <div class="customLabel">Udnyttelsesdato</div>
-                    <input type="date" id="exerciseDate" class="customControl" placeholder="dd-mm-yyyy">
+                    <input type="date" id="exerciseDate" class="customContFrol" placeholder="dd-mm-yyyy">
                 </div>
 
-                <div>
-                    <div class="customLabel">Udnyttelsesomkostninger</div>
-                    <input type="number" step="0.01" id="exerciseCosts" class="customControl">
+                <div class="split2">
+                    <div>
+                        <div class="customLabel">Udnyttelsesomkostninger</div>
+                        <input type="number" step="0.01" id="exerciseCosts" class="customControl">
+                    </div>
+                    <div>
+                        <div class="customLabel">Valuta</div>
+                        <input list="currencyDatalist" id="exerciseCostsCurrency" class="customControl" required>
+                    </div>
                 </div>
+            </div>
+
+            <div id="optionExchangeRateInfo">
             </div>
 
             <button type="submit" class="customControl" id="submitButton">

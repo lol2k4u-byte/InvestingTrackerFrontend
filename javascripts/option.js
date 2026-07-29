@@ -1,12 +1,21 @@
 import { getTitleContainer } from "./titleContainer.js";
-import { getInt, getDecimal, getEnum, getDate } from "./form.js";
+import { getInt, getDecimal, getEnum, getDate, getString } from "./form.js";
 import { loadAccounts } from "./accountDropdown.js";
 import { getOption, createOption, updateOption, deleteOption } from "./services/optionApi.js";
+import { loadExchangeRateInfoFormElement, getExchangeRateInfo, getExchangeRateInfoObject } from "./exchangeRateInfo.js";
+import { getCurrencyPairs } from "./currencyPairs.js";
+import { appendCurrencyOptions } from "./currencyDatalist.js"
 
 
 const elements = loadElements();
 const parm = loadParm();
+let exchangeRateInfoElements = null;
 const optionData = await loadForm();
+elements.premiumPriceCurrencyElem.addEventListener("change", currencyChanged);
+elements.strikePriceCurrencyElem.addEventListener("change", currencyChanged);
+elements.costsCurrencyElem.addEventListener("change", currencyChanged);
+elements.exerciseCostsCurrencyElem.addEventListener("change", currencyChanged);
+appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
 loadTitleContainer();
 await loadAccountDropdown();
 
@@ -18,6 +27,7 @@ document
 
 function loadElements() {
     return {
+        currencyDatalistElem: document.getElementById("currencyDatalist"),
         accountIdElem: document.getElementById("accountId"),
         accountIdContainerElem: document.getElementById("accountIdContainer"),
         dateElem: document.getElementById("date"),
@@ -26,13 +36,17 @@ function loadElements() {
         numberOfContractsElem: document.getElementById("numberOfContracts"),
         numberOfSharesPerContractElem: document.getElementById("numberOfSharesPerContract"),
         premiumPriceElem: document.getElementById("premiumPrice"),
+        premiumPriceCurrencyElem: document.getElementById("premiumPriceCurrency"),
         strikePriceElem: document.getElementById("strikePrice"),
+        strikePriceCurrencyElem: document.getElementById("strikePriceCurrency"),
         expireDateElem: document.getElementById("expireDate"),
         costsElem: document.getElementById("costs"),
-        costsExchangeRateElem: document.getElementById("costsExchangeRate"),
+        costsCurrencyElem: document.getElementById("costsCurrency"),
         isExercisedElem: document.getElementById("isExercised"),
         exerciseDateElem: document.getElementById("exerciseDate"),
         exerciseCostsElem: document.getElementById("exerciseCosts"),
+        exerciseCostsCurrencyElem: document.getElementById("exerciseCostsCurrency"),
+        optionExchangeRateInfoElem: document.getElementById("optionExchangeRateInfo"),
         messageElem: document.getElementById("message"),
         titleContainer: document.getElementById("titleContainer"),
         ExercisedContainer: document.getElementById("ExercisedContainer")
@@ -61,7 +75,48 @@ function loadParm() {
         id: params.get("id"),
         accountId: params.get("accountid"),
         symbol: params.get("symbol"),
+        currency: params.get("currency"),
     };
+}
+
+function loadExchangeRateInfo() {
+    elements.optionExchangeRateInfoElem.replaceChildren();
+
+    const fromCurrencies = getFromCurrencies();
+    const currencyPairMap = getCurrencyPairs(parm.currency, fromCurrencies);
+
+    const elemList = [];
+
+    currencyPairMap.forEach(currencyPair => {
+        const elemObject = getExchangeRateInfo(currencyPair);
+        elements.optionExchangeRateInfoElem.appendChild(elemObject.mainDiv);
+        elemList.push(elemObject);
+    });
+
+    return elemList;
+}
+
+function getFromCurrencies() {
+    const fromCurrencies = [];
+
+    if (elements.premiumPriceCurrencyElem.value != "") {
+        fromCurrencies.push(elements.premiumPriceCurrencyElem.value);
+    }
+    if (elements.strikePriceCurrencyElem.value != "") {
+        fromCurrencies.push(elements.strikePriceCurrencyElem.value);
+    }
+    if (elements.costsCurrencyElem.value != "") {
+        fromCurrencies.push(elements.costsCurrencyElem.value);
+    }
+    if (elements.exerciseCostsCurrencyElem.value != "") {
+        fromCurrencies.push(elements.exerciseCostsCurrencyElem.value);
+    }
+
+    return fromCurrencies;
+}
+
+function currencyChanged() {
+    exchangeRateInfoElements = loadExchangeRateInfo();
 }
 
 function isExercisedChanged() {
@@ -91,20 +146,34 @@ async function loadForm() {
         elements.numberOfContractsElem.value = optionData.option.numberOfContracts;
         elements.numberOfSharesPerContractElem.value = optionData.option.numberOfSharesPerContract;
         elements.premiumPriceElem.value = optionData.option.premiumPrice;
+        elements.premiumPriceCurrencyElem.value = optionData.option.premiumPriceCurrency;
         elements.strikePriceElem.value = optionData.option.strikePrice;
+        elements.strikePriceCurrencyElem.value = optionData.option.strikePriceCurrency;
         elements.expireDateElem.value = optionData.option.expireDate;
         elements.costsElem.value = optionData.option.costs;
-        elements.costsExchangeRateElem.value = 1;
+        elements.costsCurrencyElem.value = optionData.option.costsCurrency;
         elements.isExercisedElem.checked = optionData.option.isExercised;
         if (optionData.option.isExercised) {
             elements.exerciseDateElem.value = optionData.optionExercise.date;
             elements.exerciseCostsElem.value = optionData.optionExercise.costs;
+            elements.exerciseCostsCurrencyElem.value = optionData.optionExercise.costsCurrency;
             isExercisedChanged();
         }
+        loadExchangeRateInfoForm(optionData.exchangeRateInfos);
         return optionData;
     } else {
         return null;
     }
+}
+
+function loadExchangeRateInfoForm(exchangeRateInfos) {
+    exchangeRateInfoElements = [];
+
+    exchangeRateInfos.forEach(exchangeRateInfo => {
+        const exchangeRateInfoElement = loadExchangeRateInfoFormElement(exchangeRateInfo);
+        elements.optionExchangeRateInfoElem.appendChild(exchangeRateInfoElement.mainDiv);
+        exchangeRateInfoElements.push(exchangeRateInfoElement);
+    }); 
 }
 
 async function submitOption(event) {
@@ -118,34 +187,48 @@ async function submitOption(event) {
     const numberOfContracts = getInt(elements.numberOfContractsElem);
     const numberOfSharesPerContract = getInt(elements.numberOfSharesPerContractElem);
     const premiumPrice = getDecimal(elements.premiumPriceElem);
+    const premiumPriceCurrency = getString(elements.premiumPriceCurrencyElem);
     const strikePrice = getDecimal(elements.strikePriceElem);
+    const strikePriceCurrency = getString(elements.strikePriceCurrencyElem);
     const expireDate = getDate(elements.expireDateElem);
     const costs = getDecimal(elements.costsElem);
-    const costsExchangeRate = getDecimal(elements.costsExchangeRateElem);
+    const costsCurrency = getString(elements.costsCurrencyElem);
     const isExercised = elements.isExercisedElem.checked;
     const exerciseDate = getDate(elements.exerciseDateElem);
     const exerciseCosts = getDecimal(elements.exerciseCostsElem);
+    const exerciseCostsCurrency = getString(elements.exerciseCostsCurrencyElem);
     const accountId = parm.accountId ?? getInt(elements.accountIdElem);
 
-    if (isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, costsExchangeRate, isExercised, exerciseDate, exerciseCosts)) {
-        const response = await saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, costsExchangeRate, isExercised, exerciseDate, exerciseCosts);
+    if (isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency)) {
+        const response = await saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency);
         window.location.href = `ticker.html?symbol=${parm.symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
 }
 
-async function saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, costsExchangeRate, isExercised, exerciseDate, exerciseCosts) {
-    const costsInTickerCurrency = costs / costsExchangeRate;
+async function saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPriceCurrency, premiumPrice, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency) {
+    const exchangeRateInfos = getExchangeRateInfos();
+
     if (optionData === null) {
-        return await createOption(accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costsInTickerCurrency, isExercised, exerciseDate, exerciseCosts, elements.messageElem);
+        return await createOption(accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, isExercised, exerciseDate, exerciseCosts, exchangeRateInfos, elements.messageElem);
     } else {
-        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costsInTickerCurrency, isExercised, exerciseDate, exerciseCosts, optionData.option.latestUpdate, elements.messageElem);
+        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, isExercised, exerciseDate, exerciseCosts, exchangeRateInfos, optionData.option.latestUpdate, elements.messageElem);
     }
 }
 
+function getExchangeRateInfos() {
+    const exchangeRateInfos = [];
 
-function isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, costs, costsExchangeRate, isExercised, exerciseDate, exerciseCosts) {
+    exchangeRateInfoElements.forEach(elem => {
+        exchangeRateInfos.push(getExchangeRateInfoObject(elem));
+    });
+
+    return exchangeRateInfos;
+}
+
+
+function isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency) {
     if (accountId === null) {
         return false;
     }
@@ -174,7 +257,15 @@ function isValid(accountId, date, callPutType, longShortType, numberOfContracts,
         return false;
     }
 
+    if (premiumPriceCurrency === null) {
+        return false;
+    }
+
     if (strikePrice === null) {
+        return false;
+    }
+
+    if (strikePriceCurrency === null) {
         return false;
     }
 
@@ -186,7 +277,7 @@ function isValid(accountId, date, callPutType, longShortType, numberOfContracts,
         return false;
     }
 
-    if (costsExchangeRate === null) {
+    if (costsCurrency === null) {
         return false;
     }
 
@@ -196,6 +287,10 @@ function isValid(accountId, date, callPutType, longShortType, numberOfContracts,
         }
 
         if (exerciseCosts === null) {
+            return false;
+        }
+
+        if (exerciseCostsCurrency === null) {
             return false;
         }
     }

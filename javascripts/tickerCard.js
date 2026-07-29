@@ -69,7 +69,7 @@ export function createTickerCard(element) {
   card.appendChild(cardItemStats2);
 
 
-  let parm = `symbol=${element.symbol}`;
+  let parm = `symbol=${element.symbol}&currency=${element.currency}`;
 
   if (element.accountId) {
     parm = parm + `&accountid=${element.accountId}`;

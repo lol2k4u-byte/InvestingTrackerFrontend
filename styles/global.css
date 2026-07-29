@@ -79,6 +79,16 @@ body {
   transition: transform 0.3s ease;
 }
 
+.split2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.split2.displayNone {
+  display: none;
+}
+
 .arrow.close {
   transform: rotate(180deg);
 }

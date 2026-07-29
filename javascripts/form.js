@@ -46,6 +46,16 @@ export function getInt(element) {
     return value;
 }
 
+export function getString(element) {
+    const value = element.value;
+
+    if (value === null) {
+        return null;
+    }
+
+    return value;
+}
+
 export function getDecimal(element) {
     const value = element.value;
 

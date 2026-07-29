@@ -4,7 +4,7 @@ import { getDateFormat, getAmountFormat, getNumberFormat } from "./global.js";
 export function createDividendCard(element, currency) {
     const dividendCard = document.createElement("div");
     dividendCard.className = "item eventItem pointer";
-    dividendCard.onclick = () => { window.location.href = `dividend.html?id=${element.id}`; }
+    dividendCard.onclick = () => { window.location.href = `dividend.html?id=${element.id}&currency=${currency}`; }
 
     let date = getDateFormat(element.date);
     let numberOfShares = getNumberFormat(element.numberOfShares);

@@ -4,7 +4,7 @@ import { getBuySellTypeString, getDateFormat, getAmountFormat, getNumberFormat }
 export function createTradeCard(element, currency) {
     const tradeCard = document.createElement("div");
     tradeCard.className = "item eventItem pointer";
-    tradeCard.onclick = () => { window.location.href = `trade.html?id=${element.id}`; }
+    tradeCard.onclick = () => { window.location.href = `trade.html?id=${element.id}&currency=${currency}`; }
 
     let date = getDateFormat(element.date);
     let numberOfShares = getNumberFormat(element.numberOfShares);

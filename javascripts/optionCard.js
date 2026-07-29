@@ -4,7 +4,7 @@ import { getOptionTypeString, getDateFormat, getAmountFormat, getNumberFormat } 
 export function createOptionCard(element, currency) {
     const optionCard = document.createElement("div");
     optionCard.className = "item eventItem pointer";
-    optionCard.onclick = () => { window.location.href = `option.html?id=${element.id}`; }
+    optionCard.onclick = () => { window.location.href = `option.html?id=${element.id}&currency=${currency}`; }
 
     let date = getDateFormat(element.date);
     let numberOfShares = getNumberFormat(element.numberOfContracts * element.numberOfSharesPerContract);

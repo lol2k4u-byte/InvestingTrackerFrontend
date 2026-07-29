@@ -1,12 +1,14 @@
 import { getResponseReqAuth } from "./apiBase.js";
 
-export async function createDividend(accountId, symbol, date, numberOfShares, dividendValue, message) {
+export async function createDividend(accountId, symbol, date, numberOfShares, dividendValue, dividendCurrency, exchangeRateInfos, message) {
     const obj = {
         accountId: accountId,
         symbol: symbol,
         date: date,
         numberOfShares: numberOfShares,
-        dividendValue: dividendValue
+        dividendValue: dividendValue,
+        dividendCurrency: dividendCurrency,
+        exchangeRateInfos: exchangeRateInfos
     };
 
     const endpoint = "Dividend/create";
@@ -15,7 +17,7 @@ export async function createDividend(accountId, symbol, date, numberOfShares, di
     return await getResponseReqAuth(endpoint, method, obj, message);
 }
 
-export async function updateDividend(id, accountId, symbol, date, numberOfShares, dividendValue, latestUpdate, message) {
+export async function updateDividend(id, accountId, symbol, date, numberOfShares, dividendValue, dividendCurrency, exchangeRateInfos, latestUpdate, message) {
     const obj = {
         id: id,
         accountId: accountId,
@@ -23,6 +25,8 @@ export async function updateDividend(id, accountId, symbol, date, numberOfShares
         date: date,
         numberOfShares: numberOfShares,
         dividendValue: dividendValue,
+        dividendCurrency: dividendCurrency,
+        exchangeRateInfos: exchangeRateInfos,
         latestUpdate: latestUpdate
     };
 

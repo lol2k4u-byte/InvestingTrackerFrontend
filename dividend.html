@@ -6,6 +6,7 @@
 
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/exchangeRateInfo.css">
 
 </head>
 
@@ -15,12 +16,15 @@
         <a href="index.html" class="mainTitle">
             <h1>InvestingTracker</h1>
         </a>
-        
+
         <div id="titleContainer">
 
         </div>
 
         <form id="dividendForm">
+
+            <datalist id="currencyDatalist"></datalist>
+
             <div id="accountIdContainer">
                 <div class="customLabel">Konto</div>
                 <select id="accountId" class="customControl">
@@ -37,10 +41,22 @@
                 <input type="number" id="numberOfShares" class="customControl" required>
             </div>
 
-            <div>
-                <div class="customLabel">Udbytte</div>
-                <input type="number" step="0.01" id="dividendValue" class="customControl" required>
+            <div class="split2">
+                <div>
+                    <div class="customLabel">Udbytte</div>
+                    <input type="number" step="0.01" id="dividendValue" class="customControl" required>
+                </div>
+
+                <div>
+                    <div class="customLabel">Valuta</div>
+                    <input list="currencyDatalist" id="dividendCurrency" class="customControl" required>
+                </div>
+
             </div>
+
+            <div id="dividendExchangeRateInfo">
+            </div>
+
 
             <button type="submit" class="customControl" id="submitButton">
                 Gem
