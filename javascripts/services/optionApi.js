@@ -1,6 +1,6 @@
 import { getResponseReqAuth } from "./apiBase.js";
 
-export async function createOption(accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, message) {
+export async function createOption(accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, message) {
     const obj = {
         accountId: accountId,
         symbol: symbol,
@@ -20,7 +20,8 @@ export async function createOption(accountId, symbol, date, callPutType, longSho
         exerciseDate: exerciseDate,
         exerciseCosts: exerciseCosts,
         exerciseCostsCurrency: exerciseCostsCurrency,
-        exchangeRateInfos: exchangeRateInfos
+        exchangeRateInfos: exchangeRateInfos,
+        exerciseExchangeRateInfos: exerciseExchangeRateInfos
     };
 
     const endpoint = "Option/create";
@@ -29,7 +30,7 @@ export async function createOption(accountId, symbol, date, callPutType, longSho
     return await getResponseReqAuth(endpoint, method, obj, message);
 }
 
-export async function updateOption(id, accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, latestUpdate, message) {
+export async function updateOption(id, accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, latestUpdate, message) {
     const obj = {
         id: id,
         accountId: accountId,
@@ -51,6 +52,7 @@ export async function updateOption(id, accountId, symbol, date, callPutType, lon
         exerciseCosts: exerciseCosts,
         exerciseCostsCurrency: exerciseCostsCurrency,
         exchangeRateInfos: exchangeRateInfos,
+        exerciseExchangeRateInfos: exerciseExchangeRateInfos,
         latestUpdate: latestUpdate
     };
 

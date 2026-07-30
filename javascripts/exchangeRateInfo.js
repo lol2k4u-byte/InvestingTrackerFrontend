@@ -4,13 +4,13 @@ const autoOptionValue = 0;
 const priceOptionValue = 1;
 const rateOptionValue = 2;
 
-export function loadExchangeRateInfoFormElement(exchangeRateInfo) {
+export function loadExchangeRateInfoFormElement(exchangeRateInfo, title) {
     const currencyPair = {
         fromCurrency: exchangeRateInfo.fromCurrency,
         toCurrency: exchangeRateInfo.toCurrency,
     };
 
-    return getExchangeRateInfo(currencyPair, exchangeRateInfo);
+    return getExchangeRateInfoElements(currencyPair, title, exchangeRateInfo);
 }
 
 export function loadExchangeRateInfoElementObject(elements, exchangeRateInfo) {
@@ -31,7 +31,11 @@ export function loadExchangeRateInfoElementObject(elements, exchangeRateInfo) {
 
 }
 
-export function getExchangeRateInfo(currencyPair, exchangeRateInfo = null) {
+export function getExchangeRateInfo(currencyPair, title) {
+    return getExchangeRateInfoElements(currencyPair, title);
+}
+
+function getExchangeRateInfoElements(currencyPair, title, exchangeRateInfo) {
     const fromCurrency = currencyPair.fromCurrency;
     const toCurrency = currencyPair.toCurrency;
 

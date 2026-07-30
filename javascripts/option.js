@@ -10,11 +10,12 @@ import { appendCurrencyOptions } from "./currencyDatalist.js"
 const elements = loadElements();
 const parm = loadParm();
 let exchangeRateInfoElements = null;
+let exerciseExchangeRateInfoElements = null;
 const optionData = await loadForm();
-elements.premiumPriceCurrencyElem.addEventListener("change", currencyChanged);
-elements.strikePriceCurrencyElem.addEventListener("change", currencyChanged);
-elements.costsCurrencyElem.addEventListener("change", currencyChanged);
-elements.exerciseCostsCurrencyElem.addEventListener("change", currencyChanged);
+elements.premiumPriceCurrencyElem.addEventListener("change", optionCurrencyChanged);
+elements.strikePriceCurrencyElem.addEventListener("change", optionCurrencyChanged);
+elements.costsCurrencyElem.addEventListener("change", optionCurrencyChanged);
+elements.exerciseCostsCurrencyElem.addEventListener("change", exerciseCurrencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
 loadTitleContainer();
 await loadAccountDropdown();
@@ -47,6 +48,7 @@ function loadElements() {
         exerciseCostsElem: document.getElementById("exerciseCosts"),
         exerciseCostsCurrencyElem: document.getElementById("exerciseCostsCurrency"),
         optionExchangeRateInfoElem: document.getElementById("optionExchangeRateInfo"),
+        exerciseExchangeRateInfoElem: document.getElementById("exerciseExchangeRateInfo"),
         messageElem: document.getElementById("message"),
         titleContainer: document.getElementById("titleContainer"),
         ExercisedContainer: document.getElementById("ExercisedContainer")
@@ -79,24 +81,33 @@ function loadParm() {
     };
 }
 
-function loadExchangeRateInfo() {
-    elements.optionExchangeRateInfoElem.replaceChildren();
+function loadExchangeRateInfoOption() {
+    const fromCurrencies = getFromCurrenciesOption();
+    loadExchangeRateInfo(elements.optionExchangeRateInfoElem, fromCurrencies);
+}
 
-    const fromCurrencies = getFromCurrencies();
+function loadExchangeRateInfoExercise() {
+    const fromCurrencies = getFromCurrenciesExercise();
+    loadExchangeRateInfo(elements.exerciseExchangeRateInfoElem, fromCurrencies);
+}
+
+function loadExchangeRateInfo(element, fromCurrencies) {
+    elementreplaceChildren();
+
     const currencyPairMap = getCurrencyPairs(parm.currency, fromCurrencies);
 
     const elemList = [];
 
     currencyPairMap.forEach(currencyPair => {
         const elemObject = getExchangeRateInfo(currencyPair);
-        elements.optionExchangeRateInfoElem.appendChild(elemObject.mainDiv);
+        element.appendChild(elemObject.mainDiv);
         elemList.push(elemObject);
     });
 
     return elemList;
 }
 
-function getFromCurrencies() {
+function getFromCurrenciesOption() {
     const fromCurrencies = [];
 
     if (elements.premiumPriceCurrencyElem.value != "") {
@@ -108,6 +119,13 @@ function getFromCurrencies() {
     if (elements.costsCurrencyElem.value != "") {
         fromCurrencies.push(elements.costsCurrencyElem.value);
     }
+
+    return fromCurrencies;
+}
+
+function getFromCurrenciesExercise() {
+    const fromCurrencies = [];
+
     if (elements.exerciseCostsCurrencyElem.value != "") {
         fromCurrencies.push(elements.exerciseCostsCurrencyElem.value);
     }
@@ -115,8 +133,12 @@ function getFromCurrencies() {
     return fromCurrencies;
 }
 
-function currencyChanged() {
-    exchangeRateInfoElements = loadExchangeRateInfo();
+function optionCurrencyChanged() {
+    exchangeRateInfoElements = loadExchangeRateInfoOption();
+}
+
+function exerciseCurrencyChanged() {
+    exerciseExchangeRateInfoElements = loadExchangeRateInfoExercise();
 }
 
 function isExercisedChanged() {
@@ -159,20 +181,21 @@ async function loadForm() {
             elements.exerciseCostsCurrencyElem.value = optionData.optionExercise.costsCurrency;
             isExercisedChanged();
         }
-        loadExchangeRateInfoForm(optionData.exchangeRateInfos);
+        loadExchangeRateInfoForm(elements.optionExchangeRateInfoElem, exchangeRateInfoElements, optionData.exchangeRateInfos);
+        loadExchangeRateInfoForm(elements.exerciseExchangeRateInfoElem, exerciseExchangeRateInfoElements, optionData.exerciseExchangeRateInfos);
         return optionData;
     } else {
         return null;
     }
 }
 
-function loadExchangeRateInfoForm(exchangeRateInfos) {
-    exchangeRateInfoElements = [];
+function loadExchangeRateInfoForm(element, elementList, exchangeRateInfos) {
+    elementList = [];
 
     exchangeRateInfos.forEach(exchangeRateInfo => {
         const exchangeRateInfoElement = loadExchangeRateInfoFormElement(exchangeRateInfo);
-        elements.optionExchangeRateInfoElem.appendChild(exchangeRateInfoElement.mainDiv);
-        exchangeRateInfoElements.push(exchangeRateInfoElement);
+        element.appendChild(exchangeRateInfoElement.mainDiv);
+        elementList.push(exchangeRateInfoElement);
     }); 
 }
 
@@ -208,19 +231,20 @@ async function submitOption(event) {
 }
 
 async function saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPriceCurrency, premiumPrice, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency) {
-    const exchangeRateInfos = getExchangeRateInfos();
+    const exchangeRateInfos = getExchangeRateInfos(exchangeRateInfoElements);
+    const exerciseExchangeRateInfos = getExchangeRateInfos(exerciseExchangeRateInfoElements);
 
     if (optionData === null) {
-        return await createOption(accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, isExercised, exerciseDate, exerciseCosts, exchangeRateInfos, elements.messageElem);
+        return await createOption(accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, isExercised, exerciseDate, exerciseCosts, exchangeRateInfos, exerciseExchangeRateInfos, elements.messageElem);
     } else {
-        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, isExercised, exerciseDate, exerciseCosts, exchangeRateInfos, optionData.option.latestUpdate, elements.messageElem);
+        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, isExercised, exerciseDate, exerciseCosts, exchangeRateInfos, exerciseExchangeRateInfos, optionData.option.latestUpdate, elements.messageElem);
     }
 }
 
-function getExchangeRateInfos() {
+function getExchangeRateInfos(elemList) {
     const exchangeRateInfos = [];
 
-    exchangeRateInfoElements.forEach(elem => {
+    elemList.forEach(elem => {
         exchangeRateInfos.push(getExchangeRateInfoObject(elem));
     });
 
