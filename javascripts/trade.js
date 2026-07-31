@@ -56,7 +56,7 @@ async function loadAccountDropdown() {
 
 function loadParm() {
     const params = new URLSearchParams(window.location.search);
-    
+
     return {
         id: params.get("id"),
         accountId: params.get("accountid"),
@@ -131,7 +131,7 @@ function loadExchangeRateInfoForm(exchangeRateInfos) {
         const exchangeRateInfoElement = loadExchangeRateInfoFormElement(exchangeRateInfo);
         elements.tradeExchangeRateInfoElem.appendChild(exchangeRateInfoElement.mainDiv);
         exchangeRateInfoElements.push(exchangeRateInfoElement);
-    }); 
+    });
 }
 
 async function submitTrade(event) {
@@ -157,7 +157,7 @@ async function submitTrade(event) {
 }
 
 async function saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency) {
-     const exchangeRateInfos = getExchangeRateInfos();
+    const exchangeRateInfos = getExchangeRateInfos();
 
     if (trade === null) {
         return await createTrade(accountId, parm.symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, exchangeRateInfos, elements.messageElem);
@@ -167,6 +167,10 @@ async function saveTrade(accountId, date, buySellType, numberOfShares, sharePric
 }
 
 function getExchangeRateInfos() {
+    if (exchangeRateInfoElements === null) {
+        return null;
+    }
+
     const exchangeRateInfos = [];
 
     exchangeRateInfoElements.forEach(elem => {
@@ -182,7 +186,7 @@ function isValid(accountId, date, buySellType, numberOfShares, sharePrice, share
         return false;
     }
 
-     if (date === null) {
+    if (date === null) {
         return false;
     }
 

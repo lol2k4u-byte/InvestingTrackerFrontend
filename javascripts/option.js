@@ -83,12 +83,12 @@ function loadParm() {
 
 function loadExchangeRateInfoOption() {
     const fromCurrencies = getFromCurrenciesOption();
-    loadExchangeRateInfo(elements.optionExchangeRateInfoElem, fromCurrencies);
+    return loadExchangeRateInfo(elements.optionExchangeRateInfoElem, fromCurrencies);
 }
 
 function loadExchangeRateInfoExercise() {
     const fromCurrencies = getFromCurrenciesExercise();
-    loadExchangeRateInfo(elements.exerciseExchangeRateInfoElem, fromCurrencies);
+    return loadExchangeRateInfo(elements.exerciseExchangeRateInfoElem, fromCurrencies);
 }
 
 function loadExchangeRateInfo(element, fromCurrencies) {
@@ -242,6 +242,10 @@ async function saveOption(accountId, date, callPutType, longShortType, numberOfC
 }
 
 function getExchangeRateInfos(elemList) {
+    if (elemList === null) {
+        return null;
+    }
+
     const exchangeRateInfos = [];
 
     elemList.forEach(elem => {

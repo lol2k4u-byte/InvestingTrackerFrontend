@@ -172,6 +172,10 @@ async function saveDividend(accountId, date, numberOfShares, dividendValue, divi
 }
 
 function getExchangeRateInfos() {
+    if (exchangeRateInfoElements === null) {
+        return null;
+    }
+
     const exchangeRateInfos = [];
 
     exchangeRateInfoElements.forEach(elem => {
