@@ -92,7 +92,7 @@ function loadExchangeRateInfoExercise() {
 }
 
 function loadExchangeRateInfo(element, fromCurrencies) {
-    elementreplaceChildren();
+    element.replaceChildren();
 
     const currencyPairMap = getCurrencyPairs(parm.currency, fromCurrencies);
 
