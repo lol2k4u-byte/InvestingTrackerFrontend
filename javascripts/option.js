@@ -230,14 +230,14 @@ async function submitOption(event) {
     }
 }
 
-async function saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPriceCurrency, premiumPrice, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency) {
+async function saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency) {
     const exchangeRateInfos = getExchangeRateInfos(exchangeRateInfoElements);
     const exerciseExchangeRateInfos = getExchangeRateInfos(exerciseExchangeRateInfoElements);
 
     if (optionData === null) {
-        return await createOption(accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, isExercised, exerciseDate, exerciseCosts, exchangeRateInfos, exerciseExchangeRateInfos, elements.messageElem);
+        return await createOption(accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, elements.messageElem);
     } else {
-        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, strikePrice, expireDate, isExercised, exerciseDate, exerciseCosts, exchangeRateInfos, exerciseExchangeRateInfos, optionData.option.latestUpdate, elements.messageElem);
+        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, optionData.option.latestUpdate, elements.messageElem);
     }
 }
 
