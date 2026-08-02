@@ -190,6 +190,10 @@ async function loadForm() {
 }
 
 function loadExchangeRateInfoForm(element, elementList, exchangeRateInfos) {
+    if (exchangeRateInfos === null) {
+        return;
+    }
+    
     elementList = [];
 
     exchangeRateInfos.forEach(exchangeRateInfo => {
