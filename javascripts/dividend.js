@@ -1,6 +1,7 @@
 import { getTitleContainer } from "./titleContainer.js";
 import { getInt, getDecimal, getDate, getString } from "./form.js";
 import { loadAccounts } from "./accountDropdown.js";
+import { loadStockBrokers } from "./stockBrokerDropdown.js";
 import { getDividend, createDividend, updateDividend, deleteDividend } from "./services/dividendApi.js";
 import { loadExchangeRateInfoFormElement, getExchangeRateInfo, getExchangeRateInfoObject } from "./exchangeRateInfo.js";
 import { getCurrencyPairs } from "./currencyPairs.js";
@@ -9,6 +10,7 @@ import { appendCurrencyOptions } from "./currencyDatalist.js"
 const elements = loadElements();
 const parm = loadParm();
 let exchangeRateInfoElements = null;
+await loadStockBrokerDropdown();
 const dividend = await loadForm();
 elements.dividendCurrencyElem.addEventListener("change", dividendCurrencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
@@ -24,6 +26,7 @@ function loadElements() {
         currencyDatalistElem: document.getElementById("currencyDatalist"),
         accountIdElem: document.getElementById("accountId"),
         accountIdContainerElem: document.getElementById("accountIdContainer"),
+        stockBrokerNameElem: document.getElementById("stockBrokerName"),
         dateElem: document.getElementById("date"),
         numberOfSharesElem: document.getElementById("numberOfShares"),
         dividendValueElem: document.getElementById("dividendValue"),
@@ -46,6 +49,10 @@ async function loadAccountDropdown() {
     } else {
         elements.accountIdContainerElem.classList.add("displayNone");
     }
+}
+
+async function loadStockBrokerDropdown() {
+    await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 }
 
 function loadParm() {
@@ -105,6 +112,7 @@ async function loadForm() {
         elements.numberOfSharesElem.value = dividend.numberOfShares;
         elements.dividendValueElem.value = dividend.dividendValue;
         elements.dividendCurrencyElem.value = dividend.dividendCurrency;
+        elements.stockBrokerNameElem.value = dividend.stockBrokerName;
         loadExchangeRateInfoForm(dividendResponse.exchangeRateInfos);
         return dividend;
     } else {
@@ -131,17 +139,18 @@ async function submitDividend(event) {
     const numberOfShares = getInt(elements.numberOfSharesElem);
     const dividendValue = getDecimal(elements.dividendValueElem);
     const dividendCurrency = getString(elements.dividendCurrencyElem);
+    const stockBrokerName = getString(elements.stockBrokerNameElem);
     const accountId = parm.accountId ?? getInt(elements.accountIdElem);
 
-    if (isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency)) {
-        await saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency);
+    if (isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName)) {
+        await saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName);
         window.location.href = `ticker.html?symbol=${parm.symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
 }
 
-async function saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency) {
+async function saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName) {
     const exchangeRateInfos = getExchangeRateInfos();
 
     if (dividend === null) {
@@ -152,6 +161,7 @@ async function saveDividend(accountId, date, numberOfShares, dividendValue, divi
             numberOfShares,
             dividendValue,
             dividendCurrency,
+            stockBrokerName,
             exchangeRateInfos,
             elements.messageElem
         );
@@ -164,6 +174,7 @@ async function saveDividend(accountId, date, numberOfShares, dividendValue, divi
             numberOfShares,
             dividendValue,
             dividendCurrency,
+            stockBrokerName,
             exchangeRateInfos,
             dividend.latestUpdate,
             elements.messageElem
@@ -185,7 +196,7 @@ function getExchangeRateInfos() {
     return exchangeRateInfos;
 }
 
-function isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency) {
+function isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName) {
     if (accountId === null) {
         return false;
     }
@@ -203,6 +214,10 @@ function isValid(accountId, date, numberOfShares, dividendValue, dividendCurrenc
     }
 
     if (dividendCurrency === null) {
+        return false;
+    }
+
+    if (stockBrokerName === null) {
         return false;
     }
 

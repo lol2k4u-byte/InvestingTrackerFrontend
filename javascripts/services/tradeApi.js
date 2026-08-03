@@ -1,6 +1,6 @@
 import { getResponseReqAuth } from "./apiBase.js";
 
-export async function createTrade(accountId, symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, exchangeRateInfos, message) {
+export async function createTrade(accountId, symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, message) {
     const obj = {
         accountId: accountId,
         symbol: symbol,
@@ -11,6 +11,7 @@ export async function createTrade(accountId, symbol, date, buySellType, numberOf
         sharePriceCurrency: sharePriceCurrency,
         costs: costs,
         costsCurrency: costsCurrency,
+        stockBrokerName: stockBrokerName,
         exchangeRateInfos: exchangeRateInfos
     };
 
@@ -20,7 +21,7 @@ export async function createTrade(accountId, symbol, date, buySellType, numberOf
     return await getResponseReqAuth(endpoint, method, obj, message);
 }
 
-export async function updateTrade(id, accountId, symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, exchangeRateInfos, latestUpdate, message) {
+export async function updateTrade(id, accountId, symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, latestUpdate, message) {
     const obj = {
         id: id,
         accountId: accountId,
@@ -32,6 +33,7 @@ export async function updateTrade(id, accountId, symbol, date, buySellType, numb
         sharePriceCurrency: sharePriceCurrency,
         costs: costs,
         costsCurrency: costsCurrency,
+        stockBrokerName: stockBrokerName,
         exchangeRateInfos: exchangeRateInfos,
         latestUpdate: latestUpdate
     };
