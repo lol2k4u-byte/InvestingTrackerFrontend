@@ -19,17 +19,21 @@ export function getSignedAmountFormat(amount, currency) {
 }
 
 function getAmountFormatCommon(amount, currency, sign = null) {
-    if (amount == null || !currency) {
+    if (amount == null) {
         return "";
     }
 
-    return `${currency} ${sign}${Number(amount).toLocaleString("da-DK", {
+    let format = `${sign}${Number(amount).toLocaleString("da-DK", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     })}`;
+
+    if (currency != null) {
+        return `${currency} ${format}`;
+    } else {
+        return format;
+    }
 }
-
-
 
 export function getNumberFormat(amount) {
     if (amount == null) {
