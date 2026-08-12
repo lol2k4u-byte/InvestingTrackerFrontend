@@ -19,9 +19,14 @@
 
 
   <div class="container">
-    <a href="index.html" class="mainTitle">
-      <h1>InvestingTracker</h1>
-    </a>
+    <div class="headerDiv">
+      <a href="index.html" class="mainTitle">
+        <h1>InvestingTracker</h1>
+      </a>
+      <button class="menuButton" type="button" aria-label="Menu">
+        ☰
+      </button>
+    </div>
 
     <div class="displayNone">
       <div class="customLabel">Kun aktive:</div>
@@ -46,6 +51,8 @@
 
     <div id="liste" class="liste">
     </div>
+
+
     <script type="module" src="javascripts/index.js"></script>
     <script type="module" src="javascripts/tickerList.js"></script>
     <script type="module" src="javascripts/hidePopupMenu.js"></script>

@@ -11,6 +11,19 @@ body {
   text-decoration: none;
 }
 
+.headerDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+
 .message {
   color: red;
   margin-top: 5px;
