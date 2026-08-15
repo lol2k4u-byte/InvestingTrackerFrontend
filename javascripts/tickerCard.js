@@ -55,12 +55,13 @@ export function createTickerCard(element) {
 
   let baseCardItemStats = null;
   const baseCurrency = "DKK";
+
   if (element.currency != baseCurrency) {
     baseCardItemStats = getCardItemStats2(baseCurrency, element.baseTotalValue, element.baseReturnInfo);
     baseCardItemStats.classList.add("displayNone");
     card.appendChild(baseCardItemStats);
   }
-  
+
   let parm = `symbol=${element.symbol}&currency=${element.currency}`;
 
   if (element.accountId) {
@@ -119,16 +120,21 @@ function getCardItemStats2(currency, totalValue, returnInfo) {
   const cardItemStats2 = document.createElement("div");
   cardItemStats2.className = "cardItemStats cardItemStatsMargin";
 
-  cardItemStats2.appendChild(getStat("Værdi", getAmountFormat(totalValue, currency)));
-  cardItemStats2.appendChild(getStat("Afkast", getChangePct(returnInfo.rateOfReturn), getAmountClass(returnInfo.rateOfReturn)));
-  
-
-  if (returnInfo.costBasis) {
-    cardItemStats2.appendChild(getStat("Købspris", getAmountFormat(returnInfo.costBasis, currency)));
+  if (totalValue != null) {
+    cardItemStats2.appendChild(getStat("Værdi", getAmountFormat(totalValue, currency)));
   }
 
-  if (returnInfo.totalProfitLoss) {
-    cardItemStats2.appendChild(getStat("Profit/tab", getSignedAmountFormat(returnInfo.totalProfitLoss, currency), getAmountClass(returnInfo.totalProfitLoss)));
+  if (returnInfo != null) {
+    cardItemStats2.appendChild(getStat("Afkast", getChangePct(returnInfo.rateOfReturn), getAmountClass(returnInfo.rateOfReturn)));
+
+
+    if (returnInfo.costBasis) {
+      cardItemStats2.appendChild(getStat("Købspris", getAmountFormat(returnInfo.costBasis, currency)));
+    }
+
+    if (returnInfo.totalProfitLoss) {
+      cardItemStats2.appendChild(getStat("Profit/tab", getSignedAmountFormat(returnInfo.totalProfitLoss, currency), getAmountClass(returnInfo.totalProfitLoss)));
+    }
   }
 
   return cardItemStats2;
