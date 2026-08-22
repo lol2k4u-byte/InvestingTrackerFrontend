@@ -189,15 +189,15 @@ async function loadForm() {
             elements.exerciseCostsCurrencyElem.value = optionData.optionExercise.costsCurrency;
             isExercisedChanged();
         }
-        loadExchangeRateInfoForm(elements.optionExchangeRateInfoElem, exchangeRateInfoElements, optionData.exchangeRateInfos);
-        loadExchangeRateInfoForm(elements.exerciseExchangeRateInfoElem, exerciseExchangeRateInfoElements, optionData.exerciseExchangeRateInfos);
+        exchangeRateInfoElements = loadExchangeRateInfoForm(elements.optionExchangeRateInfoElem, optionData.exchangeRateInfos);
+        exerciseExchangeRateInfoElements = loadExchangeRateInfoForm(elements.exerciseExchangeRateInfoElem, optionData.exerciseExchangeRateInfos);
         return optionData;
     } else {
         return null;
     }
 }
 
-function loadExchangeRateInfoForm(element, elementList, exchangeRateInfos) {
+function loadExchangeRateInfoForm(element, exchangeRateInfos) {
     if (exchangeRateInfos === null) {
         return;
     }
@@ -209,6 +209,8 @@ function loadExchangeRateInfoForm(element, elementList, exchangeRateInfos) {
         element.appendChild(exchangeRateInfoElement.mainDiv);
         elementList.push(exchangeRateInfoElement);
     }); 
+
+    return elementList;
 }
 
 async function submitOption(event) {
