@@ -203,7 +203,7 @@ function loadExchangeRateInfoForm(element, exchangeRateInfos) {
         return;
     }
     
-    elementList = [];
+    const elementList = [];
 
     exchangeRateInfos.forEach(exchangeRateInfo => {
         const exchangeRateInfoElement = loadExchangeRateInfoFormElement(exchangeRateInfo);
