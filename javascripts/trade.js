@@ -11,13 +11,13 @@ import { appendCurrencyOptions } from "./currencyDatalist.js"
 const elements = loadElements();
 const parm = loadParm();
 let exchangeRateInfoElements = null;
+await loadAccountDropdown();
 await loadStockBrokerDropdown();
 const trade = await loadForm();
 elements.sharePriceCurrencyElem.addEventListener("change", currencyChanged);
 elements.costsCurrencyElem.addEventListener("change", currencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
 loadTitleContainer();
-await loadAccountDropdown();
 
 
 document
@@ -160,7 +160,8 @@ async function submitTrade(event) {
 
     if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName)) {
         const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName);
-        window.location.href = `ticker.html?symbol=${parm.symbol}&accountid=${accountId}`;
+        const symbol = trade.symbol ?? parm.symbol;
+        window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }

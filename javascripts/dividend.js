@@ -10,12 +10,12 @@ import { appendCurrencyOptions } from "./currencyDatalist.js"
 const elements = loadElements();
 const parm = loadParm();
 let exchangeRateInfoElements = null;
+await loadAccountDropdown();
 await loadStockBrokerDropdown();
 const dividend = await loadForm();
 elements.dividendCurrencyElem.addEventListener("change", dividendCurrencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
 loadTitleContainer();
-await loadAccountDropdown();
 
 document
     .getElementById("dividendForm")
@@ -144,7 +144,8 @@ async function submitDividend(event) {
 
     if (isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName)) {
         await saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName);
-        window.location.href = `ticker.html?symbol=${parm.symbol}&accountid=${accountId}`;
+        const symbol = dividend.symbol ?? parm.symbol;
+        window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
