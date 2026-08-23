@@ -12,6 +12,7 @@ const elements = loadElements();
 const parm = loadParm();
 let exchangeRateInfoElements = null;
 let exerciseExchangeRateInfoElements = null;
+await loadAccountDropdown();
 await loadStockBrokerDropdown();
 const optionData = await loadForm();
 elements.premiumPriceCurrencyElem.addEventListener("change", optionCurrencyChanged);
@@ -20,7 +21,7 @@ elements.costsCurrencyElem.addEventListener("change", optionCurrencyChanged);
 elements.exerciseCostsCurrencyElem.addEventListener("change", exerciseCurrencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
 loadTitleContainer();
-await loadAccountDropdown();
+
 
 elements.isExercisedElem.addEventListener("change", isExercisedChanged);
 
