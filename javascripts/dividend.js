@@ -13,6 +13,7 @@ let exchangeRateInfoElements = null;
 await loadAccountDropdown();
 await loadStockBrokerDropdown();
 const dividend = await loadForm();
+const symbol = getSymbol();
 elements.dividendCurrencyElem.addEventListener("change", dividendCurrencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
 loadTitleContainer();
@@ -101,6 +102,14 @@ async function onClickDelete() {
     return await deleteDividend(dividend.id, dividend.latestUpdate, elements.messageElem);
 }
 
+function getSymbol() {
+    if (dividend != null) {
+        return dividend.symbol;
+    } else {
+        return parm.symbol;
+    }
+}
+
 async function loadForm() {
     elements.dateElem.value = new Date().toISOString().split("T")[0];
 
@@ -144,7 +153,6 @@ async function submitDividend(event) {
 
     if (isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName)) {
         await saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName);
-        const symbol = dividend.symbol ?? parm.symbol;
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";

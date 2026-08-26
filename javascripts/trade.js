@@ -14,6 +14,7 @@ let exchangeRateInfoElements = null;
 await loadAccountDropdown();
 await loadStockBrokerDropdown();
 const trade = await loadForm();
+const symbol = getSymbol();
 elements.sharePriceCurrencyElem.addEventListener("change", currencyChanged);
 elements.costsCurrencyElem.addEventListener("change", currencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
@@ -111,6 +112,14 @@ async function onClickDelete() {
     return await deleteTrade(trade.id, trade.latestUpdate, elements.messageElem);
 }
 
+function getSymbol() {
+    if (trade != null) {
+        return trade.symbol;
+    } else {
+        return parm.symbol;
+    }
+}
+
 async function loadForm() {
     elements.dateElem.value = new Date().toISOString().split("T")[0];
 
@@ -160,7 +169,6 @@ async function submitTrade(event) {
 
     if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName)) {
         const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName);
-        const symbol = trade.symbol ?? parm.symbol;
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";

@@ -15,6 +15,7 @@ let exerciseExchangeRateInfoElements = null;
 await loadAccountDropdown();
 await loadStockBrokerDropdown();
 const optionData = await loadForm();
+const symbol = getSymbol();
 elements.premiumPriceCurrencyElem.addEventListener("change", optionCurrencyChanged);
 elements.strikePriceCurrencyElem.addEventListener("change", exerciseCurrencyChanged);
 elements.costsCurrencyElem.addEventListener("change", optionCurrencyChanged);
@@ -165,6 +166,14 @@ async function onClickDelete() {
     return await deleteOption(optionData.option.id, optionData.option.latestUpdate, elements.messageElem);
 }
 
+function getSymbol() {
+    if (optionData != null) {
+        return optionData.option.symbol;
+    } else {
+        return parm.symbol;
+    }
+}
+
 async function loadForm() {
     elements.dateElem.value = new Date().toISOString().split("T")[0];
 
@@ -240,7 +249,6 @@ async function submitOption(event) {
 
     if (isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency)) {
         const response = await saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency);
-        const symbol = optionData.option.symbol ?? parm.symbol;
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
