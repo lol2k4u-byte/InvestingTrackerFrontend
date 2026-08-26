@@ -245,13 +245,21 @@ async function submitOption(event) {
     const exerciseDate = getDate(elements.exerciseDateElem);
     const exerciseCosts = getDecimal(elements.exerciseCostsElem);
     const exerciseCostsCurrency = getString(elements.exerciseCostsCurrencyElem);
-    const accountId = parm.accountId ?? getInt(elements.accountIdElem);
+    const accountId = getAccountId();
 
     if (isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency)) {
         const response = await saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency);
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
+    }
+}
+
+function getAccountId() {
+    if (parm.accountId != null) {
+        return Number(parm.accountId);
+    } else {
+        return getInt(elements.accountIdElem);
     }
 }
 

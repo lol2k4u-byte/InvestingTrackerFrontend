@@ -165,13 +165,21 @@ async function submitTrade(event) {
     const costs = getDecimal(elements.costsElem);
     const costsCurrency = getString(elements.costsCurrencyElem);
     const stockBrokerName = getString(elements.stockBrokerNameElem);
-    const accountId = parm.accountId ?? getInt(elements.accountIdElem);
+    const accountId = getAccountId();
 
     if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName)) {
         const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName);
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
+    }
+}
+
+function getAccountId() {
+    if (parm.accountId != null) {
+        return Number(parm.accountId);
+    } else {
+        return getInt(elements.accountIdElem);
     }
 }
 
