@@ -152,7 +152,7 @@ async function submitDividend(event) {
     const accountId = getAccountId();
 
     if (isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName)) {
-        await saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName);
+        const response = await saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName);
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
