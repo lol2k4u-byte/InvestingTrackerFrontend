@@ -9,10 +9,10 @@ import { appendCurrencyOptions } from "./currencyDatalist.js"
 
 
 const elements = loadElements();
+await loadAccounts(elements.accountIdElem, elements.messageElem);
+await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 const parm = loadParm();
 let exchangeRateInfoElements = null;
-await loadAccountDropdown();
-await loadStockBrokerDropdown();
 const trade = await loadForm();
 const symbol = getSymbol();
 elements.sharePriceCurrencyElem.addEventListener("change", currencyChanged);
@@ -48,19 +48,6 @@ function loadTitleContainer() {
 
     const onDelete = (trade === null) ? null : onClickDelete;
     elements.titleContainer.appendChild(getTitleContainer("Trade", onDelete));
-}
-
-async function loadAccountDropdown() {
-    if (parm.accountId === null) {
-        await loadAccounts(elements.accountIdElem, elements.messageElem);
-        elements.accountIdElem.required = true;
-    } else {
-        elements.accountIdContainerElem.classList.add("displayNone");
-    }
-}
-
-async function loadStockBrokerDropdown() {
-    await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 }
 
 function loadParm() {
@@ -134,10 +121,14 @@ async function loadForm() {
         elements.sharePriceCurrencyElem.value = trade.sharePriceCurrency;
         elements.costsElem.value = trade.costs;
         elements.costsCurrencyElem.value = trade.costsCurrency;
+        elements.accountIdElem.value = trade.accountId;
         elements.stockBrokerNameElem.value = trade.stockBrokerName;
         loadExchangeRateInfoForm(tradeResponse.exchangeRateInfos);
         return trade;
     } else {
+        if (parm.accountId != null) {
+            elements.accountIdElem.value = parm.accountId;
+        }
         return null;
     }
 }
@@ -165,21 +156,13 @@ async function submitTrade(event) {
     const costs = getDecimal(elements.costsElem);
     const costsCurrency = getString(elements.costsCurrencyElem);
     const stockBrokerName = getString(elements.stockBrokerNameElem);
-    const accountId = getAccountId();
+    const accountId = getInt(elements.accountIdElem);
 
     if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName)) {
         const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName);
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
-    }
-}
-
-function getAccountId() {
-    if (parm.accountId != null) {
-        return Number(parm.accountId);
-    } else {
-        return getInt(elements.accountIdElem);
     }
 }
 

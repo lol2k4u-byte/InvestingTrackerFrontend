@@ -9,11 +9,11 @@ import { appendCurrencyOptions } from "./currencyDatalist.js"
 
 
 const elements = loadElements();
+await loadAccounts(elements.accountIdElem, elements.messageElem);
+await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 const parm = loadParm();
 let exchangeRateInfoElements = null;
 let exerciseExchangeRateInfoElements = null;
-await loadAccountDropdown();
-await loadStockBrokerDropdown();
 const optionData = await loadForm();
 const symbol = getSymbol();
 elements.premiumPriceCurrencyElem.addEventListener("change", optionCurrencyChanged);
@@ -64,19 +64,6 @@ function loadTitleContainer() {
 
     const onDelete = (optionData === null) ? null : onClickDelete;
     elements.titleContainer.appendChild(getTitleContainer("Option", onDelete));
-}
-
-async function loadAccountDropdown() {
-    if (parm.accountId === null) {
-        await loadAccounts(elements.accountIdElem, elements.messageElem);
-        elements.accountIdElem.required = true;
-    } else {
-        elements.accountIdContainerElem.classList.add("displayNone");
-    }
-}
-
-async function loadStockBrokerDropdown() {
-    await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 }
 
 function loadParm() {
@@ -191,6 +178,7 @@ async function loadForm() {
         elements.expireDateElem.value = optionData.option.expireDate;
         elements.costsElem.value = optionData.option.costs;
         elements.costsCurrencyElem.value = optionData.option.costsCurrency;
+        elements.accountIdElem.value = optionData.option.accountId;
         elements.stockBrokerNameElem.value = optionData.option.stockBrokerName;
         elements.isExercisedElem.checked = optionData.option.isExercised;
         if (optionData.option.isExercised) {
@@ -203,6 +191,9 @@ async function loadForm() {
         exerciseExchangeRateInfoElements = loadExchangeRateInfoForm(elements.exerciseExchangeRateInfoElem, optionData.exerciseExchangeRateInfos);
         return optionData;
     } else {
+        if (parm.accountId != null) {
+            elements.accountIdElem.value = parm.accountId;
+        }
         return null;
     }
 }
@@ -245,21 +236,13 @@ async function submitOption(event) {
     const exerciseDate = getDate(elements.exerciseDateElem);
     const exerciseCosts = getDecimal(elements.exerciseCostsElem);
     const exerciseCostsCurrency = getString(elements.exerciseCostsCurrencyElem);
-    const accountId = getAccountId();
+    const accountId = getInt(elements.accountIdElem);
 
     if (isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency)) {
         const response = await saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency);
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
-    }
-}
-
-function getAccountId() {
-    if (parm.accountId != null) {
-        return Number(parm.accountId);
-    } else {
-        return getInt(elements.accountIdElem);
     }
 }
 

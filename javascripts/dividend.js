@@ -8,10 +8,10 @@ import { getCurrencyPairs } from "./currencyPairs.js";
 import { appendCurrencyOptions } from "./currencyDatalist.js"
 
 const elements = loadElements();
+await loadAccounts(elements.accountIdElem, elements.messageElem);
+await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 const parm = loadParm();
 let exchangeRateInfoElements = null;
-await loadAccountDropdown();
-await loadStockBrokerDropdown();
 const dividend = await loadForm();
 const symbol = getSymbol();
 elements.dividendCurrencyElem.addEventListener("change", dividendCurrencyChanged);
@@ -41,19 +41,6 @@ function loadElements() {
 function loadTitleContainer() {
     const onDelete = (dividend === null) ? null : onClickDelete;
     elements.titleContainer.appendChild(getTitleContainer("Dividend", onDelete));
-}
-
-async function loadAccountDropdown() {
-    if (parm.accountId === null) {
-        await loadAccounts(elements.accountIdElem, elements.messageElem);
-        elements.accountIdElem.required = true;
-    } else {
-        elements.accountIdContainerElem.classList.add("displayNone");
-    }
-}
-
-async function loadStockBrokerDropdown() {
-    await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 }
 
 function loadParm() {
@@ -121,10 +108,14 @@ async function loadForm() {
         elements.numberOfSharesElem.value = dividend.numberOfShares;
         elements.dividendValueElem.value = dividend.dividendValue;
         elements.dividendCurrencyElem.value = dividend.dividendCurrency;
+        elements.accountIdElem.value = dividend.accountId;
         elements.stockBrokerNameElem.value = dividend.stockBrokerName;
         loadExchangeRateInfoForm(dividendResponse.exchangeRateInfos);
         return dividend;
     } else {
+        if (parm.accountId != null) {
+            elements.accountIdElem.value = parm.accountId;
+        }
         return null;
     }
 }
@@ -149,21 +140,13 @@ async function submitDividend(event) {
     const dividendValue = getDecimal(elements.dividendValueElem);
     const dividendCurrency = getString(elements.dividendCurrencyElem);
     const stockBrokerName = getString(elements.stockBrokerNameElem);
-    const accountId = getAccountId();
+    const accountId = getInt(elements.accountIdElem);
 
     if (isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName)) {
         const response = await saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName);
         window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
-    }
-}
-
-function getAccountId() {
-    if (parm.accountId != null) {
-        return Number(parm.accountId);
-    } else {
-        return getInt(elements.accountIdElem);
     }
 }
 
