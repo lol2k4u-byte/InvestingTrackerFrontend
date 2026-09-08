@@ -185,10 +185,10 @@ async function loadForm() {
             elements.exerciseDateElem.value = optionData.optionExercise.date;
             elements.exerciseCostsElem.value = optionData.optionExercise.costs;
             elements.exerciseCostsCurrencyElem.value = optionData.optionExercise.costsCurrency;
+            exerciseExchangeRateInfoElements = loadExchangeRateInfoForm(elements.exerciseExchangeRateInfoElem, optionData.exerciseExchangeRateInfos);
             isExercisedChanged();
         }
         exchangeRateInfoElements = loadExchangeRateInfoForm(elements.optionExchangeRateInfoElem, optionData.exchangeRateInfos);
-        exerciseExchangeRateInfoElements = loadExchangeRateInfoForm(elements.exerciseExchangeRateInfoElem, optionData.exerciseExchangeRateInfos);
         return optionData;
     } else {
         if (parm.accountId != null) {
