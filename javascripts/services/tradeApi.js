@@ -1,4 +1,4 @@
-import { getResponseReqAuth } from "./apiBase.js";
+import { getResponseReqAuthJson } from "./apiBase.js";
 
 export async function createTrade(accountId, symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, message) {
     const obj = {
@@ -18,7 +18,7 @@ export async function createTrade(accountId, symbol, date, buySellType, numberOf
     const endpoint = "Trade/create";
     const method = "POST";
     
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function updateTrade(id, accountId, symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, latestUpdate, message) {
@@ -41,7 +41,7 @@ export async function updateTrade(id, accountId, symbol, date, buySellType, numb
     const endpoint = "Trade/update";
     const method = "POST";
     
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function deleteTrade(id, latestUpdate, message) {
@@ -53,13 +53,13 @@ export async function deleteTrade(id, latestUpdate, message) {
     const endpoint = "Trade/delete";
     const method = "POST";
     
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function getTrade(id, message) {
     const endpoint = "Trade/" + id;
     const method = "GET";
     
-    return await getResponseReqAuth(endpoint, method, null, message);
+    return await getResponseReqAuthJson(endpoint, method, null, message);
 }
 

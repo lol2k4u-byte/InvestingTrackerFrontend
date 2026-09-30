@@ -1,4 +1,4 @@
-import { getResponseReqAuth } from "./apiBase.js";
+import { getResponseReqAuthJson, getResponseReqAuthStream } from "./apiBase.js";
 
 
 export async function getTickerInfo(accountId, symbol, message) {
@@ -10,7 +10,7 @@ export async function getTickerInfo(accountId, symbol, message) {
 
     const method = "GET";
     
-    return await getResponseReqAuth(endpoint, method, null, message);
+    return await getResponseReqAuthJson(endpoint, method, null, message);
 };
 
 export async function getTickerList(activeOnly, message) {
@@ -19,7 +19,7 @@ export async function getTickerList(activeOnly, message) {
     const method = "GET";
     const obj = null;
 
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
     
 
 };
@@ -28,14 +28,14 @@ export async function getTickerEvents(accountId, symbol, message) {
     const endpoint = `Ticker/events?accountid=${accountId}&symbol=${symbol}`;
     const method = "GET";
     
-    return await getResponseReqAuth(endpoint, method, null, message);
+    return await getResponseReqAuthJson(endpoint, method, null, message);
 }
 
 export async function getSearch(query, message) {
     const endpoint = `Ticker/search?query=${query}`;
     const method = "GET";
     
-    return await getResponseReqAuth(endpoint, method, null, message);
+    return await getResponseReqAuthJson(endpoint, method, null, message);
 }
 
 export async function hideTicker(accountId, symbol, hide, latestUpdate, message) {
@@ -49,5 +49,23 @@ export async function hideTicker(accountId, symbol, hide, latestUpdate, message)
         latestUpdate: latestUpdate
     };
     
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
+}
+
+export async function stream(items, message, callback, signal) {
+    const endpoint = `Ticker/stream`;
+    const method = "POST";
+
+    const obj = items.map(getStreamItem);
+    
+    await getResponseReqAuthStream(endpoint, method, obj, message, callback, signal);
+}
+
+function getStreamItem(item) {
+    return {
+        correlationId: item.correlationId,
+        accountId: item.accountId,
+        symbol: item.symbol,
+        currency: item.currency
+    };
 }

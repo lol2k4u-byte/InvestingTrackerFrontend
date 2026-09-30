@@ -2,6 +2,17 @@ import { createPopupMenu } from "./popupMenu.js";
 import { getAmountFormat, getAmountClass, getChangePct, getNumberFormat, getSignedAmountFormat } from "./global.js";
 import { hideTicker } from "./services/tickerApi.js";
 
+const baseCurrency = "DKK";
+
+export function updateTickerCard(card, element) {
+  card.cardPriceElem.replaceChildren();
+  setStats1Children(card.cardPriceElem, element.currency, element.numberOfShares, element.tickerPrice.latestPrice, element.tickerPrice.latestPriceChangePct)
+  card.cardValueElem.replaceChildren();
+  setStats2Children(card.cardValueElem, element.currency, element.tickerPrice.totalValue, element.tickerPrice.returnInfo);
+  card.cardBaseValueElem.replaceChildren();
+  setStats2Children(card.cardBaseValueElem, baseCurrency, element.tickerPrice.baseTotalValue, element.tickerPrice.baseReturnInfo);
+}
+
 export function createTickerCard(element) {
   const card = document.createElement("div");
   card.className = "cardItem pointer";
@@ -41,26 +52,17 @@ export function createTickerCard(element) {
   }
   card.appendChild(cardItemHeader);
 
-  const cardItemStats1 = document.createElement("div");
-  cardItemStats1.className = "cardItemStats";
+  const cardPriceStats = document.createElement("div");
+  cardPriceStats.className = "cardItemStats";
+  setStats1Children(cardPriceStats, element.currency, element.numberOfShares, element.tickerPrice.latestPrice, element.tickerPrice.latestPriceChangePct);
+  card.appendChild(cardPriceStats);
 
-  cardItemStats1.appendChild(getStat("Antal", getNumberFormat(element.numberOfShares)));
-  cardItemStats1.appendChild(getStat("I dag", getChangePct(element.latestPriceChangePct), getAmountClass(element.latestPriceChangePct)));
-  cardItemStats1.appendChild(getStat("Seneste", getAmountFormat(element.latestPrice, element.currency)));
+  const cardValueStats = getCardItemStats2(element.currency, element.tickerPrice.totalValue, element.tickerPrice.returnInfo);
+  card.appendChild(cardValueStats);
 
-  card.appendChild(cardItemStats1);
-
-
-  card.appendChild(getCardItemStats2(element.currency, element.totalValue, element.returnInfo));
-
-  let baseCardItemStats = null;
-  const baseCurrency = "DKK";
-
-  if (element.currency != baseCurrency) {
-    baseCardItemStats = getCardItemStats2(baseCurrency, element.baseTotalValue, element.baseReturnInfo);
-    baseCardItemStats.classList.add("displayNone");
-    card.appendChild(baseCardItemStats);
-  }
+  const cardBaseValueStats = getCardItemStats2(baseCurrency, element.tickerPrice.baseTotalValue, element.tickerPrice.baseReturnInfo);
+  cardBaseValueStats.classList.add("displayNone");
+  card.appendChild(cardBaseValueStats);
 
   let parm = `symbol=${element.symbol}&currency=${element.currency}`;
 
@@ -80,12 +82,15 @@ export function createTickerCard(element) {
     {
       text: "Udbytte",
       onClick: () => { window.location.href = `dividend.html?${parm}`; }
-    },
-    {
-      text: "Udvid",
-      onClick: () => { expand(baseCardItemStats); }
     }
   ];
+  
+  if (element.currency != baseCurrency) {
+    elementer.push({
+      text: "Udvid",
+      onClick: () => { expand(baseCardItemStats); }
+    });
+  }
 
   if (element.accountId != null && element.isHidden != null) {
     if (element.isHidden === true) {
@@ -108,7 +113,37 @@ export function createTickerCard(element) {
     window.location.href = `ticker.html?${parm}`;
   });
 
-  return card;
+  return {
+    cardElem: card,
+    cardPriceElem: cardPriceStats,
+    cardValueElem: cardValueStats,
+    cardBaseValueElem: cardBaseValueStats
+  }
+}
+
+function setStats1Children(elem, currency, numberOfShares, latestPrice, latestPriceChangePct) {
+  elem.appendChild(getStat("Antal", getNumberFormat(numberOfShares)));
+  elem.appendChild(getStat("I dag", getChangePct(latestPriceChangePct), getAmountClass(latestPriceChangePct)));
+  elem.appendChild(getStat("Seneste", getAmountFormat(latestPrice, currency)));
+}
+
+function setStats2Children(elem, currency, totalValue, returnInfo) {
+  if (totalValue != null) {
+    elem.appendChild(getStat("Værdi", getAmountFormat(totalValue, currency)));
+  }
+
+  if (returnInfo != null) {
+    elem.appendChild(getStat("Afkast", getChangePct(returnInfo.rateOfReturn), getAmountClass(returnInfo.rateOfReturn)));
+
+
+    if (returnInfo.costBasis) {
+      elem.appendChild(getStat("Købspris", getAmountFormat(returnInfo.costBasis, currency)));
+    }
+
+    if (returnInfo.totalProfitLoss) {
+      elem.appendChild(getStat("Profit/tab", getSignedAmountFormat(returnInfo.totalProfitLoss, currency), getAmountClass(returnInfo.totalProfitLoss)));
+    }
+  }
 }
 
 async function hideCardTicker(element, hide) {
@@ -120,23 +155,8 @@ function getCardItemStats2(currency, totalValue, returnInfo) {
   const cardItemStats2 = document.createElement("div");
   cardItemStats2.className = "cardItemStats cardItemStatsMargin";
 
-  if (totalValue != null) {
-    cardItemStats2.appendChild(getStat("Værdi", getAmountFormat(totalValue, currency)));
-  }
-
-  if (returnInfo != null) {
-    cardItemStats2.appendChild(getStat("Afkast", getChangePct(returnInfo.rateOfReturn), getAmountClass(returnInfo.rateOfReturn)));
-
-
-    if (returnInfo.costBasis) {
-      cardItemStats2.appendChild(getStat("Købspris", getAmountFormat(returnInfo.costBasis, currency)));
-    }
-
-    if (returnInfo.totalProfitLoss) {
-      cardItemStats2.appendChild(getStat("Profit/tab", getSignedAmountFormat(returnInfo.totalProfitLoss, currency), getAmountClass(returnInfo.totalProfitLoss)));
-    }
-  }
-
+  setStats2Children(cardItemStats2, currency, totalValue, returnInfo);
+  
   return cardItemStats2;
 }
 

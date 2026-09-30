@@ -1,4 +1,4 @@
-import { getResponseReqAuth } from "./apiBase.js";
+import { getResponseReqAuthJson } from "./apiBase.js";
 
 export async function createDividend(accountId, symbol, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName, exchangeRateInfos, message) {
     const obj = {
@@ -15,7 +15,7 @@ export async function createDividend(accountId, symbol, date, numberOfShares, di
     const endpoint = "Dividend/create";
     const method = "POST";
 
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function updateDividend(id, accountId, symbol, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName, exchangeRateInfos, latestUpdate, message) {
@@ -35,7 +35,7 @@ export async function updateDividend(id, accountId, symbol, date, numberOfShares
     const endpoint = "Dividend/update";
     const method = "POST";
 
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function deleteDividend(id, latestUpdate, message) {
@@ -47,12 +47,12 @@ export async function deleteDividend(id, latestUpdate, message) {
     const endpoint = "Dividend/delete";
     const method = "POST";
 
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function getDividend(id, message) {
     const endpoint = "Dividend/" + id;
     const method = "GET";
 
-    return await getResponseReqAuth(endpoint, method, null, message);
+    return await getResponseReqAuthJson(endpoint, method, null, message);
 }

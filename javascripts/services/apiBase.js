@@ -24,7 +24,7 @@ function getHeaders(token) {
     return headers;
 }
 
-function getRequestInfo(method, token, obj) {
+function getRequestInfo(method, token, obj, signal) {
     const requestInfo = {
         method: method,
         headers: getHeaders(token)
@@ -33,6 +33,10 @@ function getRequestInfo(method, token, obj) {
     if (obj != null) {
         requestInfo["body"] = JSON.stringify(obj)
     };
+
+    if (signal != null) {
+        requestInfo["signal"] = signal;
+    }
 
     return requestInfo;
 }
@@ -53,14 +57,63 @@ function redirect() {
     window.location.href = `login.html`;
 }
 
-export async function getResponseReqAuth(endpoint, method, obj, message) {
+export async function getResponseReqAuthStream(endpoint, method, obj, message, callback, signal = null) {
+    const response = await getResponseReqAuth(endpoint, method, obj, message, signal);
+
+    if (response != null) {
+        const reader = response.body.getReader();
+        await processReader(reader, callback);
+    }
+}
+
+async function processReader(reader, callback) {
+    const decoder = new TextDecoder();
+
+    let buffer = "";
+
+    try {
+        while (true) {
+            const { value, done } = await reader.read();
+
+            if (done) {
+                break;
+            }
+
+            buffer += decoder.decode(value, { stream: true });
+
+            const events = buffer.split("\n\n");
+            buffer = events.pop();
+
+            for (const event of events) {
+                if (event.startsWith("data: ")) {
+                    const data = JSON.parse(event.substring(6));
+
+                    await callback(data);
+                }
+            }
+        }
+    } catch (error) {
+        if (error.name !== "AbortError") {
+            console.error(error);
+        }
+    }
+} 
+
+export async function getResponseReqAuthJson(endpoint, method, obj, message, signal = null) {
+    const response = await getResponseReqAuth(endpoint, method, obj, message, signal);
+
+    if (response != null)
+        return await response.json();
+}
+
+export async function getResponseReqAuth(endpoint, method, obj, message, signal = null) {
     const token = getToken();
 
     if (token != null) {
-        const response = await getResponse(endpoint, method, token, obj, message);
+        const response = await getResponse(endpoint, method, token, obj, message, signal);
 
         if (response.status === 200) {
-            return await response.json();
+            return response;
         } else if (response.status === 401) {
             redirect();
         } else {
@@ -74,18 +127,22 @@ export async function getResponseReqAuth(endpoint, method, obj, message) {
     return null;
 };
 
-export async function getResponse(endpoint, method, token, obj, message) {
+export async function getResponse(endpoint, method, token, obj, message, signal = null) {
 
     const url = getApiBase() + endpoint;
-    const requestInfo = getRequestInfo(method, token, obj);
+    const requestInfo = getRequestInfo(method, token, obj, signal);
 
     try {
         const response = await fetch(url, requestInfo);
 
         return response;
     } catch (error) {
-        console.error(error);
-        message.textContent = "Ingen forbindelse til serveren";
+        if (error.name === "AbortError") {
+            console.log("Request cancelled");
+        } else {
+            console.error(error);
+            message.textContent = "Ingen forbindelse til serveren";
+        }
     }
 
     return null;

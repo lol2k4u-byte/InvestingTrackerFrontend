@@ -1,4 +1,4 @@
-import { getResponseReqAuth } from "./apiBase.js";
+import { getResponseReqAuthJson } from "./apiBase.js";
 
 export async function createOption(accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, message) {
     const obj = {
@@ -28,7 +28,7 @@ export async function createOption(accountId, symbol, date, callPutType, longSho
     const endpoint = "Option/create";
     const method = "POST";
     
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function updateOption(id, accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, latestUpdate, message) {
@@ -61,7 +61,7 @@ export async function updateOption(id, accountId, symbol, date, callPutType, lon
     const endpoint = "Option/update";
     const method = "POST";
     
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function deleteOption(id, latestUpdate, message) {
@@ -73,13 +73,13 @@ export async function deleteOption(id, latestUpdate, message) {
     const endpoint = "Option/delete";
     const method = "POST";
     
-    return await getResponseReqAuth(endpoint, method, obj, message);
+    return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
 export async function getOption(id, message) {
     const endpoint = "Option/" + id;
     const method = "GET";
     
-    return await getResponseReqAuth(endpoint, method, null, message);
+    return await getResponseReqAuthJson(endpoint, method, null, message);
 }
 
