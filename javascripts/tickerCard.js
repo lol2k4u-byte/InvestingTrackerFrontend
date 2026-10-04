@@ -1,187 +1,217 @@
 import { createPopupMenu } from "./popupMenu.js";
-import { getAmountFormat, getAmountClass, getChangePct, getNumberFormat, getSignedAmountFormat } from "./global.js";
+import {
+  getAmountFormat,
+  getAmountClass,
+  getChangePct,
+  getNumberFormat,
+  getSignedAmountFormat
+} from "./global.js";
 import { hideTicker } from "./services/tickerApi.js";
 
 const baseCurrency = "DKK";
+const numberOfSharesStatId = "NumberOfShares";
+const latestPriceChangePctStatId = "LatestPriceChangePct";
+const latestPriceStatId = "LatestPrice";
+const totalValueStatId = "TotalValue";
+const rateOfReturnStatId = "RateOfReturn";
+const costBasisStatId = "CostBasis";
+const totalProfitLossStatId = "TotalProfitLoss";
+let tickerCardId = 0;
 
-export function updateTickerCard(card, element) {
-  card.cardPriceElem.replaceChildren();
-  setStats1Children(card.cardPriceElem, element.currency, element.numberOfShares, element.tickerPrice.latestPrice, element.tickerPrice.latestPriceChangePct)
-  card.cardValueElem.replaceChildren();
-  setStats2Children(card.cardValueElem, element.currency, element.tickerPrice.totalValue, element.tickerPrice.returnInfo);
-  card.cardBaseValueElem.replaceChildren();
-  setStats2Children(card.cardBaseValueElem, baseCurrency, element.tickerPrice.baseTotalValue, element.tickerPrice.baseReturnInfo);
+export function updateTickerCard(card, ticker) {
+  const { currency, numberOfShares, tickerPrice } = ticker;
+
+  updateValue(card, numberOfSharesStatId, numberOfShares, getNumberFormat);
+  updateValue(card, latestPriceChangePctStatId, tickerPrice?.latestPriceChangePct, getChangePct, getAmountClass);
+  updateValue(card, latestPriceStatId, tickerPrice?.latestPrice, value => getAmountFormat(value, currency));
+  updateValue(card, totalValueStatId, tickerPrice?.totalValue, value => getAmountFormat(value, currency));
+  updateValue(card, `Base${totalValueStatId}`, tickerPrice?.baseTotalValue, value => getAmountFormat(value, baseCurrency));
+  updateReturnInfo(card, tickerPrice?.returnInfo, currency);
+  updateReturnInfo(card, tickerPrice?.baseReturnInfo, baseCurrency, "Base");
 }
 
-export function createTickerCard(element) {
-  const card = document.createElement("div");
-  card.className = "cardItem pointer";
+function updateReturnInfo(card, returnInfo, valueCurrency, prefix = "") {
+  updateValue(card, `${prefix}${rateOfReturnStatId}`, returnInfo?.rateOfReturn, getChangePct, getAmountClass);
+  updateValue(card, `${prefix}${costBasisStatId}`, returnInfo?.costBasis, value => getAmountFormat(value, valueCurrency));
+  updateValue(card, `${prefix}${totalProfitLossStatId}`, returnInfo?.totalProfitLoss, value => getSignedAmountFormat(value, valueCurrency), getAmountClass);
+}
 
-  const cardItemHeader = document.createElement("div");
-  cardItemHeader.className = "cardItemHeader";
-
-  if (element.logo === null) {
-    const symbolChar = element.symbol?.[0] ?? "";
-    cardItemHeader.innerHTML = `
-      <div class="cardItemLogoText">${symbolChar}</div>
-      <div class="cardItemName">${element.companyName}</div>
-    `;
-  } else {
-    const cardItemLogo = document.createElement("div");
-    cardItemLogo.className = "cardItemLogo";
-    const img = document.createElement("img");
-    img.className = "cardItemLogo";
-    img.src = element.logo;
-    cardItemLogo.appendChild(img);
-    img.onerror = () => {
-      img.style.display = "none";
-    };
-
-    const cardItemName = document.createElement("div");
-    cardItemName.className = "cardItemName";
-    cardItemName.textContent = element.companyName;
-
-    cardItemHeader.appendChild(cardItemLogo);
-    cardItemHeader.appendChild(cardItemName);
-    /*
-    cardItemHeader.innerHTML = `
-      <div class="cardItemLogo"><img class="cardItemLogo" src="${element.logo}"/></div>
-      <div class="cardItemName">${element.companyName}</div>
-    `;
-    */
-  }
-  card.appendChild(cardItemHeader);
-
-  const cardPriceStats = document.createElement("div");
-  cardPriceStats.className = "cardItemStats";
-  setStats1Children(cardPriceStats, element.currency, element.numberOfShares, element.tickerPrice.latestPrice, element.tickerPrice.latestPriceChangePct);
-  card.appendChild(cardPriceStats);
-
-  const cardValueStats = getCardItemStats2(element.currency, element.tickerPrice.totalValue, element.tickerPrice.returnInfo);
-  card.appendChild(cardValueStats);
-
-  const cardBaseValueStats = getCardItemStats2(baseCurrency, element.tickerPrice.baseTotalValue, element.tickerPrice.baseReturnInfo);
-  cardBaseValueStats.classList.add("displayNone");
-  card.appendChild(cardBaseValueStats);
-
-  let parm = `symbol=${element.symbol}&currency=${element.currency}`;
-
-  if (element.accountId) {
-    parm = parm + `&accountid=${element.accountId}`;
+function updateValue(card, statId, value, format, getValueClass = null) {
+  if (value == null) {
+    return;
   }
 
-  let elementer = [
-    {
-      text: "Handel",
-      onClick: () => { window.location.href = `trade.html?${parm}`; }
-    },
-    {
-      text: "Option",
-      onClick: () => { window.location.href = `option.html?${parm}`; }
-    },
-    {
-      text: "Udbytte",
-      onClick: () => { window.location.href = `dividend.html?${parm}`; }
+  const element = card.cardElem.querySelector(`[id="TickerCard#${card.id}_${statId}Value"]`);
+  if (element) {
+    element.textContent = format(value);
+    element.className = "cardItemStatValue StatValue";
+    const valueClass = getValueClass?.(value);
+    if (valueClass) {
+      element.classList.add(valueClass);
     }
-  ];
-  
-  if (element.currency != baseCurrency) {
-    elementer.push({
-      text: "Udvid",
-      onClick: () => { expand(baseCardItemStats); }
-    });
+    element.parentElement.classList.remove("displayNone");
   }
+}
 
-  if (element.accountId != null && element.isHidden != null) {
-    if (element.isHidden === true) {
-      elementer.push({
-        text: "Vis",
-        onClick: () => { hideCardTicker(element, false); }
-      })
-    } else {
-      elementer.push({
-        text: "Skjul",
-        onClick: () => { hideCardTicker(element, true); }
-      })
-    }
-  }
+export function createTickerCard(ticker) {
+  tickerCardId += 1;
 
-  const popupMenu = createPopupMenu("⋯", elementer);
-  card.appendChild(popupMenu);
+  const card = createElement("div", "cardItem pointer");
+  const cardPriceStats = createElement("div", "cardItemStats");
+  const cardValueStats = createElement("div", "cardItemStats cardItemStatsMargin");
+  const cardBaseValueStats = createElement("div", "cardItemStats cardItemStatsMargin displayNone");
+  const query = getTickerQuery(ticker);
+  const menuItems = createMenuItems(ticker, query, cardBaseValueStats);
 
-  card.addEventListener("click", () => {
-    window.location.href = `ticker.html?${parm}`;
-  });
-
-  return {
+  const tickerCard = {
+    id: tickerCardId,
     cardElem: card,
     cardPriceElem: cardPriceStats,
     cardValueElem: cardValueStats,
     cardBaseValueElem: cardBaseValueStats
-  }
+  };
+
+  setCardStats(tickerCard, ticker);
+  card.append(
+    createHeader(ticker),
+    cardPriceStats,
+    cardValueStats,
+    cardBaseValueStats,
+    createPopupMenu("⋯", menuItems)
+  );
+  card.addEventListener("click", () => {
+    window.location.href = `ticker.html?${query}`;
+  });
+
+  return tickerCard;
 }
 
-function setStats1Children(elem, currency, numberOfShares, latestPrice, latestPriceChangePct) {
-  elem.appendChild(getStat("Antal", getNumberFormat(numberOfShares)));
-  elem.appendChild(getStat("I dag", getChangePct(latestPriceChangePct), getAmountClass(latestPriceChangePct)));
-  elem.appendChild(getStat("Seneste", getAmountFormat(latestPrice, currency)));
+export function setCardStats(tickerCard, ticker) {
+  const { currency, numberOfShares, tickerPrice } = ticker;
+
+  setPriceStats(tickerCard.cardPriceElem, currency, numberOfShares, tickerPrice);
+  setValueStats(tickerCard.cardValueElem, currency, tickerPrice.totalValue, tickerPrice.returnInfo);
+  setValueStats(tickerCard.cardBaseValueElem, baseCurrency, tickerPrice.baseTotalValue, tickerPrice.baseReturnInfo, "Base");
 }
 
-function setStats2Children(elem, currency, totalValue, returnInfo) {
-  if (totalValue != null) {
-    elem.appendChild(getStat("Værdi", getAmountFormat(totalValue, currency)));
+function createHeader(ticker) {
+  const header = createElement("div", "cardItemHeader");
+  const name = createElement("div", "cardItemName", ticker.companyName);
+  let logo;
+
+  if (ticker.logo === null) {
+    logo = createElement("div", "cardItemLogoText", ticker.symbol?.[0] ?? "");
+  } else {
+    logo = createElement("div", "cardItemLogo");
+    const image = createElement("img", "cardItemLogo");
+    image.src = ticker.logo;
+    image.onerror = () => {
+      image.style.display = "none";
+    };
+    logo.append(image);
   }
 
-  if (returnInfo != null) {
-    elem.appendChild(getStat("Afkast", getChangePct(returnInfo.rateOfReturn), getAmountClass(returnInfo.rateOfReturn)));
+  header.append(logo, name);
+  return header;
+}
 
+function getTickerQuery(ticker) {
+  let query = `symbol=${ticker.symbol}&currency=${ticker.currency}`;
 
-    if (returnInfo.costBasis) {
-      elem.appendChild(getStat("Købspris", getAmountFormat(returnInfo.costBasis, currency)));
+  if (ticker.accountId) {
+    query += `&accountid=${ticker.accountId}`;
+  }
+
+  return query;
+}
+
+function createMenuItems(ticker, query, baseValueStats) {
+  const menuItems = [
+    createNavigationItem("Handel", "trade.html", query),
+    createNavigationItem("Option", "option.html", query),
+    createNavigationItem("Udbytte", "dividend.html", query)
+  ];
+
+  if (ticker.currency !== baseCurrency) {
+    menuItems.push({
+      text: "Udvid",
+      onClick: () => baseValueStats.classList.toggle("displayNone")
+    });
+  }
+
+  if (ticker.accountId != null && ticker.isHidden != null) {
+    const shouldHide = ticker.isHidden !== true;
+    menuItems.push({
+      text: shouldHide ? "Skjul" : "Vis",
+      onClick: () => hideCardTicker(ticker, shouldHide)
+    });
+  }
+
+  return menuItems;
+}
+
+function createNavigationItem(text, page, query) {
+  return {
+    text,
+    onClick: () => {
+      window.location.href = `${page}?${query}`;
     }
-
-    if (returnInfo.totalProfitLoss) {
-      elem.appendChild(getStat("Profit/tab", getSignedAmountFormat(returnInfo.totalProfitLoss, currency), getAmountClass(returnInfo.totalProfitLoss)));
-    }
-  }
+  };
 }
 
-async function hideCardTicker(element, hide) {
-  await hideTicker(element.accountId, element.symbol, hide, element.accountTickerLatestUpdate, null);
+function setPriceStats(container, currency, numberOfShares, tickerPrice) {
+  const { latestPrice, latestPriceChangePct } = tickerPrice;
+
+  container.replaceChildren(
+    createStat("Antal", getNumberFormat(numberOfShares), numberOfSharesStatId),
+    createStat("I dag", getChangePct(latestPriceChangePct), latestPriceChangePctStatId, getAmountClass(latestPriceChangePct)),
+    createStat("Seneste", getAmountFormat(latestPrice, currency), latestPriceStatId)
+  );
+}
+
+function setValueStats(container, currency, totalValue, returnInfo, statIdPrefix = "") {
+  const { rateOfReturn, costBasis, totalProfitLoss } = returnInfo ?? {};
+
+  container.replaceChildren(
+    createStat("Værdi", getAmountFormat(totalValue, currency), `${statIdPrefix}${totalValueStatId}`, null, totalValue == null),
+    createStat("Afkast", rateOfReturn == null ? "" : getChangePct(rateOfReturn), `${statIdPrefix}${rateOfReturnStatId}`, getAmountClass(rateOfReturn), rateOfReturn == null),
+    createStat("Købspris", getAmountFormat(costBasis, currency), `${statIdPrefix}${costBasisStatId}`, null, costBasis == null),
+    createStat("Profit/tab", getSignedAmountFormat(totalProfitLoss, currency), `${statIdPrefix}${totalProfitLossStatId}`, getAmountClass(totalProfitLoss), totalProfitLoss == null)
+  );
+}
+
+async function hideCardTicker(ticker, hide) {
+  await hideTicker(ticker.accountId, ticker.symbol, hide, ticker.accountTickerLatestUpdate, null);
   window.location.reload();
 }
 
-function getCardItemStats2(currency, totalValue, returnInfo) {
-  const cardItemStats2 = document.createElement("div");
-  cardItemStats2.className = "cardItemStats cardItemStatsMargin";
+function createStat(label, value, statId = "", valueClass = null, hidden = false) {
+  const stat = createElement("div", hidden ? "stat displayNone" : "stat");
+  const labelElement = createElement("div", "cardItemStatLabel StatLabel", label);
+  const valueElement = createElement("div", "cardItemStatValue StatValue", value);
 
-  setStats2Children(cardItemStats2, currency, totalValue, returnInfo);
-  
-  return cardItemStats2;
-}
+  labelElement.id = getTagId(`${statId}Label`);
+  valueElement.id = getTagId(`${statId}Value`);
 
-function getStat(label, value, valueClass = null) {
-  const stat = document.createElement("div");
-  stat.className = "stat";
-
-  const labelElem = document.createElement("div");
-  labelElem.className = "cardItemStatLabel StatLabel";
-  labelElem.textContent = label;
-  stat.appendChild(labelElem);
-
-  const valueElem = document.createElement("div");
-  valueElem.className = "cardItemStatValue StatValue";
   if (valueClass) {
-    valueElem.classList.add(valueClass);
+    valueElement.classList.add(valueClass);
   }
-  valueElem.textContent = value;
-  stat.appendChild(valueElem);
 
+  stat.append(labelElement, valueElement);
   return stat;
 }
 
-function expand(element) {
-  if (element != null) {
-    element.classList.toggle("displayNone");
+function createElement(tag, className, text) {
+  const element = document.createElement(tag);
+  element.className = className;
+
+  if (text !== undefined) {
+    element.textContent = text;
   }
+
+  return element;
+}
+
+function getTagId(name) {
+  return `TickerCard#${tickerCardId}_${name}`;
 }
