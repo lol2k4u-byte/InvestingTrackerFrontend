@@ -28,6 +28,32 @@ export function updateTickerCard(card, ticker) {
   updateValue(card, `Base${totalValueStatId}`, tickerPrice?.baseTotalValue, value => getAmountFormat(value, baseCurrency));
   updateReturnInfo(card, tickerPrice?.returnInfo, currency);
   updateReturnInfo(card, tickerPrice?.baseReturnInfo, baseCurrency, "Base");
+  updatePriceTimeLabels(card, tickerPrice?.latestPriceTime);
+}
+
+function updatePriceTimeLabels(card, latestPriceTime) {
+  const priceTime = latestPriceTime == null ? NaN : new Date(latestPriceTime).getTime();
+  const ageMinutes = (Date.now() - priceTime) / 60000;
+  const isExpired = !Number.isFinite(priceTime) || ageMinutes > 60;
+  const isDelayed = !isExpired && ageMinutes > 15;
+  const statIds = [
+    latestPriceChangePctStatId,
+    latestPriceStatId,
+    totalValueStatId,
+    `Base${totalValueStatId}`,
+    rateOfReturnStatId,
+    `Base${rateOfReturnStatId}`
+  ];
+
+  for (const container of [card.cardPriceElem, card.cardValueElem, card.cardBaseValueElem]) {
+    for (const statId of statIds) {
+      const label = container.querySelector(`[id="TickerCard#${card.id}_${statId}Label"]`);
+      if (label) {
+        label.classList.toggle("priceTimeDelayed", isDelayed);
+        label.classList.toggle("priceTimeExpired", isExpired);
+      }
+    }
+  }
 }
 
 function updateReturnInfo(card, returnInfo, valueCurrency, prefix = "") {
@@ -92,6 +118,7 @@ export function setCardStats(tickerCard, ticker) {
   setPriceStats(tickerCard.cardPriceElem, currency, numberOfShares, tickerPrice);
   setValueStats(tickerCard.cardValueElem, currency, tickerPrice.totalValue, tickerPrice.returnInfo);
   setValueStats(tickerCard.cardBaseValueElem, baseCurrency, tickerPrice.baseTotalValue, tickerPrice.baseReturnInfo, "Base");
+  updatePriceTimeLabels(tickerCard, tickerPrice?.latestPriceTime);
 }
 
 function createHeader(ticker) {

@@ -81,6 +81,14 @@
   margin-bottom: 10px;
 }
 
+.cardItemStatLabel.priceTimeDelayed {
+  color: #d4a000;
+}
+
+.cardItemStatLabel.priceTimeExpired {
+  color: #c23433;
+}
+
 .cardItemStatValue {
   font-size: 30px;
   font-weight: 700;
