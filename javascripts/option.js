@@ -15,7 +15,7 @@ const parm = loadParm();
 let exchangeRateInfoElements = null;
 let exerciseExchangeRateInfoElements = null;
 const optionData = await loadForm();
-const symbol = getSymbol();
+const tickerId = getTickerId();
 elements.premiumPriceCurrencyElem.addEventListener("change", optionCurrencyChanged);
 elements.strikePriceCurrencyElem.addEventListener("change", exerciseCurrencyChanged);
 elements.costsCurrencyElem.addEventListener("change", optionCurrencyChanged);
@@ -72,7 +72,7 @@ function loadParm() {
     return {
         id: params.get("id"),
         accountId: params.get("accountid"),
-        symbol: params.get("symbol"),
+        tickerId: params.get("tickerid"),
         currency: params.get("currency"),
     };
 }
@@ -153,11 +153,11 @@ async function onClickDelete() {
     return await deleteOption(optionData.option.id, optionData.option.latestUpdate, elements.messageElem);
 }
 
-function getSymbol() {
+function getTickerId() {
     if (optionData != null) {
-        return optionData.option.symbol;
+        return optionData.option.tickerId;
     } else {
-        return parm.symbol;
+        return parm.tickerId;
     }
 }
 
@@ -222,8 +222,8 @@ async function submitOption(event) {
     const date = getDate(elements.dateElem);
     const callPutType = getEnum(elements.callPutTypeElem, 0, 1);
     const longShortType = getEnum(elements.longShortTypeElem, 0, 1);
-    const numberOfContracts = getInt(elements.numberOfContractsElem);
-    const numberOfSharesPerContract = getInt(elements.numberOfSharesPerContractElem);
+    const numberOfContracts = getDecimal(elements.numberOfContractsElem);
+    const numberOfSharesPerContract = getDecimal(elements.numberOfSharesPerContractElem);
     const premiumPrice = getDecimal(elements.premiumPriceElem);
     const premiumPriceCurrency = getString(elements.premiumPriceCurrencyElem);
     const strikePrice = getDecimal(elements.strikePriceElem);
@@ -240,7 +240,7 @@ async function submitOption(event) {
 
     if (isValid(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency)) {
         const response = await saveOption(accountId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency);
-        window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
+        window.location.href = `ticker.html?tickerid=${tickerId}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
@@ -251,9 +251,9 @@ async function saveOption(accountId, date, callPutType, longShortType, numberOfC
     const exerciseExchangeRateInfos = getExchangeRateInfos(exerciseExchangeRateInfoElements);
 
     if (optionData === null) {
-        return await createOption(accountId, parm.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, elements.messageElem);
+        return await createOption(accountId, parm.tickerId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, elements.messageElem);
     } else {
-        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, optionData.option.latestUpdate, elements.messageElem);
+        return await updateOption(optionData.option.id, optionData.option.accountId, optionData.option.tickerId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, optionData.option.latestUpdate, elements.messageElem);
     }
 }
 

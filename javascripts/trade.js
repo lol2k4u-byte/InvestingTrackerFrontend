@@ -14,7 +14,7 @@ await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 const parm = loadParm();
 let exchangeRateInfoElements = null;
 const trade = await loadForm();
-const symbol = getSymbol();
+const tickerId = getTickerId();
 elements.sharePriceCurrencyElem.addEventListener("change", currencyChanged);
 elements.costsCurrencyElem.addEventListener("change", currencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
@@ -56,7 +56,7 @@ function loadParm() {
     return {
         id: params.get("id"),
         accountId: params.get("accountid"),
-        symbol: params.get("symbol"),
+        tickerId: params.get("tickerid"),
         currency: params.get("currency"),
     };
 }
@@ -99,11 +99,11 @@ async function onClickDelete() {
     return await deleteTrade(trade.id, trade.latestUpdate, elements.messageElem);
 }
 
-function getSymbol() {
+function getTickerId() {
     if (trade != null) {
-        return trade.symbol;
+        return trade.tickerId;
     } else {
-        return parm.symbol;
+        return parm.tickerId;
     }
 }
 
@@ -150,7 +150,7 @@ async function submitTrade(event) {
 
     const date = getDate(elements.dateElem);
     const buySellType = getEnum(elements.buySellTypeElem);
-    const numberOfShares = getInt(elements.numberOfSharesElem);
+    const numberOfShares = getDecimal(elements.numberOfSharesElem);
     const sharePrice = getDecimal(elements.sharePriceElem);
     const sharePriceCurrency = getString(elements.sharePriceCurrencyElem);
     const costs = getDecimal(elements.costsElem);
@@ -160,7 +160,7 @@ async function submitTrade(event) {
 
     if (isValid(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName)) {
         const response = await saveTrade(accountId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName);
-        window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
+        window.location.href = `ticker.html?tickerid=${tickerId}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
@@ -170,9 +170,9 @@ async function saveTrade(accountId, date, buySellType, numberOfShares, sharePric
     const exchangeRateInfos = getExchangeRateInfos();
 
     if (trade === null) {
-        return await createTrade(accountId, parm.symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, elements.messageElem);
+        return await createTrade(accountId, parm.tickerId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, elements.messageElem);
     } else {
-        return await updateTrade(trade.id, trade.accountId, trade.symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, trade.latestUpdate, elements.messageElem);
+        return await updateTrade(trade.id, trade.accountId, trade.tickerId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, trade.latestUpdate, elements.messageElem);
     }
 }
 

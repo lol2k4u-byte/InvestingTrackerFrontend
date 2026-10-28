@@ -27,7 +27,7 @@ function addStreamRequest(element, card) {
   const streamRequest = {
     correlationId: correlationId,
     accountId: element.accountId,
-    symbol: element.symbol,
+    tickerId: element.tickerId,
     currency: element.currency,
     card: card
   };

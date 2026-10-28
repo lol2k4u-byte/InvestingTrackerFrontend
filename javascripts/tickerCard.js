@@ -127,7 +127,7 @@ function createHeader(ticker) {
   let logo;
 
   if (ticker.logo === null) {
-    logo = createElement("div", "cardItemLogoText", ticker.symbol?.[0] ?? "");
+    logo = createElement("div", "cardItemLogoText", ticker.companyName?.[0] ?? "");
   } else {
     logo = createElement("div", "cardItemLogo");
     const image = createElement("img", "cardItemLogo");
@@ -143,12 +143,13 @@ function createHeader(ticker) {
 }
 
 function getTickerQuery(ticker) {
-  let query = `symbol=${ticker.symbol}&currency=${ticker.currency}`;
+  let query = `tickerid=${ticker.tickerId}&currency=${ticker.currency}`;
 
   if (ticker.accountId) {
     query += `&accountid=${ticker.accountId}`;
   }
 
+  console.info(query);
   return query;
 }
 
@@ -208,7 +209,7 @@ function setValueStats(container, currency, totalValue, returnInfo, statIdPrefix
 }
 
 async function hideCardTicker(ticker, hide) {
-  await hideTicker(ticker.accountId, ticker.symbol, hide, ticker.accountTickerLatestUpdate, null);
+  await hideTicker(ticker.accountId, ticker.tickerId, hide, ticker.accountTickerLatestUpdate, null);
   window.location.reload();
 }
 

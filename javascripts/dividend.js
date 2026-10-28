@@ -13,7 +13,7 @@ await loadStockBrokers(elements.stockBrokerNameElem, elements.messageElem);
 const parm = loadParm();
 let exchangeRateInfoElements = null;
 const dividend = await loadForm();
-const symbol = getSymbol();
+const tickerId = getTickerId();
 elements.dividendCurrencyElem.addEventListener("change", dividendCurrencyChanged);
 appendCurrencyOptions(elements.currencyDatalistElem, parm.currency);
 loadTitleContainer();
@@ -49,7 +49,7 @@ function loadParm() {
     return {
         id: params.get("id"),
         accountId: params.get("accountid"),
-        symbol: params.get("symbol"),
+        tickerId: params.get("tickerid"),
         currency: params.get("currency"),
     };
 }
@@ -89,11 +89,11 @@ async function onClickDelete() {
     return await deleteDividend(dividend.id, dividend.latestUpdate, elements.messageElem);
 }
 
-function getSymbol() {
+function getTickerId() {
     if (dividend != null) {
-        return dividend.symbol;
+        return dividend.tickerId;
     } else {
-        return parm.symbol;
+        return parm.tickerId;
     }
 }
 
@@ -136,7 +136,7 @@ async function submitDividend(event) {
     elements.messageElem.textContent = "";
 
     const date = getDate(elements.dateElem);
-    const numberOfShares = getInt(elements.numberOfSharesElem);
+    const numberOfShares = getDecimal(elements.numberOfSharesElem);
     const dividendValue = getDecimal(elements.dividendValueElem);
     const dividendCurrency = getString(elements.dividendCurrencyElem);
     const stockBrokerName = getString(elements.stockBrokerNameElem);
@@ -144,7 +144,7 @@ async function submitDividend(event) {
 
     if (isValid(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName)) {
         const response = await saveDividend(accountId, date, numberOfShares, dividendValue, dividendCurrency, stockBrokerName);
-        window.location.href = `ticker.html?symbol=${symbol}&accountid=${accountId}`;
+        window.location.href = `ticker.html?tickerid=${tickerId}&accountid=${accountId}`;
     } else {
         elements.messageElem.textContent = "Fejl i input";
     }
@@ -156,7 +156,7 @@ async function saveDividend(accountId, date, numberOfShares, dividendValue, divi
     if (dividend === null) {
         return await createDividend(
             accountId,
-            parm.symbol,
+            parm.tickerId,
             date,
             numberOfShares,
             dividendValue,
@@ -169,7 +169,7 @@ async function saveDividend(accountId, date, numberOfShares, dividendValue, divi
         return await updateDividend(
             dividend.id,
             dividend.accountId,
-            dividend.symbol,
+            dividend.tickerId,
             date,
             numberOfShares,
             dividendValue,

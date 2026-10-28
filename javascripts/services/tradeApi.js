@@ -1,9 +1,9 @@
 import { getResponseReqAuthJson } from "./apiBase.js";
 
-export async function createTrade(accountId, symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, message) {
+export async function createTrade(accountId, tickerId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, message) {
     const obj = {
         accountId: accountId,
-        symbol: symbol,
+        tickerId: tickerId,
         date: date,
         buySellType: buySellType,
         numberOfShares: numberOfShares,
@@ -21,11 +21,11 @@ export async function createTrade(accountId, symbol, date, buySellType, numberOf
     return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
-export async function updateTrade(id, accountId, symbol, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, latestUpdate, message) {
+export async function updateTrade(id, accountId, tickerId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, latestUpdate, message) {
     const obj = {
         id: id,
         accountId: accountId,
-        symbol: symbol,
+        tickerId: tickerId,
         date: date,
         buySellType: buySellType,
         numberOfShares: numberOfShares,

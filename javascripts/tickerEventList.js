@@ -16,14 +16,14 @@ function loadParm() {
 
   return {
     accountId: params.get("accountid"),
-    symbol: params.get("symbol")
+    tickerId: params.get("tickerid")
   };
 }
 
 async function buildEventList() {
   const eventList = document.getElementById("eventList");
-  const ticker = await getSharedTicker(parm.accountId, parm.symbol);
-  const events = await getTickerEvents(parm.accountId, parm.symbol);
+  const ticker = await getSharedTicker(parm.accountId, parm.tickerId);
+  const events = await getTickerEvents(parm.accountId, parm.tickerId);
 
   events.forEach((event) => {
     if (event.trade != null) {

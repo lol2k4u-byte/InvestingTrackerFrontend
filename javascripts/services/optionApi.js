@@ -1,9 +1,9 @@
 import { getResponseReqAuthJson } from "./apiBase.js";
 
-export async function createOption(accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, message) {
+export async function createOption(accountId, tickerId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, message) {
     const obj = {
         accountId: accountId,
-        symbol: symbol,
+        tickerId: tickerId,
         date: date,
         callPutType: callPutType,
         longShortType: longShortType,
@@ -31,11 +31,11 @@ export async function createOption(accountId, symbol, date, callPutType, longSho
     return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
-export async function updateOption(id, accountId, symbol, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, latestUpdate, message) {
+export async function updateOption(id, accountId, tickerId, date, callPutType, longShortType, numberOfContracts, numberOfSharesPerContract, premiumPrice, premiumPriceCurrency, strikePrice, strikePriceCurrency, expireDate, costs, costsCurrency, stockBrokerName, isExercised, exerciseDate, exerciseCosts, exerciseCostsCurrency, exchangeRateInfos, exerciseExchangeRateInfos, latestUpdate, message) {
     const obj = {
         id: id,
         accountId: accountId,
-        symbol: symbol,
+        tickerId: tickerId,
         date: date,
         callPutType: callPutType,
         longShortType: longShortType,

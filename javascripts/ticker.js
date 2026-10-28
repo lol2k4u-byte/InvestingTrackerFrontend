@@ -5,8 +5,8 @@ import { loadController } from "./controller.js";
 
 const params = new URLSearchParams(window.location.search);
 const accountId = params.get("accountid");
-const symbol = params.get("symbol");
-const ticker = await getSharedTicker(accountId, symbol);
+const tickerId = params.get("tickerid");
+const ticker = await getSharedTicker(accountId, tickerId);
 const controller = loadController();
 let streamRequest = null;
 loadTickerCard();
@@ -29,7 +29,7 @@ function getStreamRequest(element, card) {
   return {
     correlationId: correlationId,
     accountId: element.accountId,
-    symbol: element.symbol,
+    tickerId: element.tickerId,
     currency: element.currency,
     card: card
   };
