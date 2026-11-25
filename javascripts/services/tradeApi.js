@@ -1,8 +1,8 @@
 import { getResponseReqAuthJson } from "./apiBase.js";
 
-export async function createTrade(accountId, tickerId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, message) {
+export async function createTrade(stockBrokerAccountId, tickerId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, exchangeRateInfos, message) {
     const obj = {
-        accountId: accountId,
+        stockBrokerAccountId: stockBrokerAccountId,
         tickerId: tickerId,
         date: date,
         buySellType: buySellType,
@@ -11,7 +11,6 @@ export async function createTrade(accountId, tickerId, date, buySellType, number
         sharePriceCurrency: sharePriceCurrency,
         costs: costs,
         costsCurrency: costsCurrency,
-        stockBrokerName: stockBrokerName,
         exchangeRateInfos: exchangeRateInfos
     };
 
@@ -21,10 +20,10 @@ export async function createTrade(accountId, tickerId, date, buySellType, number
     return await getResponseReqAuthJson(endpoint, method, obj, message);
 }
 
-export async function updateTrade(id, accountId, tickerId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, stockBrokerName, exchangeRateInfos, latestUpdate, message) {
+export async function updateTrade(id, stockBrokerAccountId, tickerId, date, buySellType, numberOfShares, sharePrice, sharePriceCurrency, costs, costsCurrency, exchangeRateInfos, latestUpdate, message) {
     const obj = {
         id: id,
-        accountId: accountId,
+        stockBrokerAccountId: stockBrokerAccountId,
         tickerId: tickerId,
         date: date,
         buySellType: buySellType,
@@ -33,7 +32,6 @@ export async function updateTrade(id, accountId, tickerId, date, buySellType, nu
         sharePriceCurrency: sharePriceCurrency,
         costs: costs,
         costsCurrency: costsCurrency,
-        stockBrokerName: stockBrokerName,
         exchangeRateInfos: exchangeRateInfos,
         latestUpdate: latestUpdate
     };

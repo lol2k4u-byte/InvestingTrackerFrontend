@@ -1,14 +1,25 @@
-import { getStockBrokers } from "./services/stockBrokerApi.js";
+import { getStockBrokerAccounts } from "./services/stockBrokerAccountApi.js";
 
-export async function loadStockBrokers(selectElement, message) {
+const stockBrokerAccountMap = new Map();
 
-    const stockBrokers = await getStockBrokers(message);
+export async function loadStockBrokerAccounts(selectElement, message) {
 
-    stockBrokers.forEach(stockBroker => {
+    const stockBrokerAccounts = await getStockBrokerAccounts(message);
+    
+    stockBrokerAccounts.forEach(stockBrokerAccount => {
         const option = document.createElement("option");
-        option.value = stockBroker.name;
-        option.textContent = stockBroker.name;
+        option.value = stockBrokerAccount.stockBrokerAccountId;
+        option.textContent = `${stockBrokerAccount.stockBrokerName}: ${stockBrokerAccount.accountName}`;
 
         selectElement.appendChild(option);
+        stockBrokerAccountMap.set(stockBrokerAccount.stockBrokerAccountId, stockBrokerAccount);
     });
+}
+
+function getStockBrokerAccount(stockBrokerAccountId) {
+    return stockBrokerAccountMap.get(stockBrokerAccountId);
+}
+
+export function getAccountId(stockBrokerAccountId) {
+    return getStockBrokerAccount(stockBrokerAccountId).accountId;
 }
